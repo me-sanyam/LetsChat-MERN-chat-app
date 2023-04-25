@@ -34,18 +34,18 @@ exports.register = async (req, res) => {
     }
 }
 
-exports.login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+// exports.login = async (req, res) => {
+//     try {
+//         const { email, password } = req.body;
 
-        const AlreadyExists = await USER.findOne({ email: email })
-        if (!AlreadyExists) {
-            res.status(400).json({
-                message: `user with email ${req.body.email} doesn't exists.`
-            });
-        }
+//         const AlreadyExists = await USER.findOne({ email: email })
+//         if (!AlreadyExists) {
+//             res.status(400).json({
+//                 message: `user with email ${req.body.email} doesn't exists.`
+//             });
+//         }
 
-    } catch (error) {
-        throw error
-    }
-}
+//     } catch (error) {
+//         throw error
+//     }
+// }
