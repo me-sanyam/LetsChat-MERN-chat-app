@@ -38,7 +38,6 @@ export default function RegisterUser() {
                     }
                 }
                 const { data } = await axios.post('http://localhost:5000/api/signup', { name, email, password, avatar }, config);
-                console.log(data);
                 toast.success('User signup successfull.');
                 navigate('/');
                 localStorage.setItem('UserInfo', JSON.stringify(data));

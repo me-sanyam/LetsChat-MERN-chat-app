@@ -31,18 +31,27 @@ exports.register = asyncHandler(async (req, res) => {
     })
 })
 
-// exports.login = async (req, res) => {
-//     try {
-//         const { email, password } = req.body;
+exports.login = asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
 
-//         const AlreadyExists = await USER.findOne({ email: email })
-//         if (!AlreadyExists) {
-//             res.status(400).json({
-//                 message: `user with email ${req.body.email} doesn't exists.`
-//             });
-//         }
+    const user = await USER.findOne({ email: email })
+    if (!user) {
+        res.status(400).json({
+            message: `user with email ${req.body.email} doesn't exists.`
+        });
+    }
 
-//     } catch (error) {
-//         throw error
-//     }
-// }
+    const ispasswordmatched = await user.ComparePassword(password);
+
+    if (!ispasswordmatched) {
+        res.status(400).json({
+            message: 'Invalid Password! Try again later.'
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        user,
+        token: generatetoken(user._id)
+    })
+})
