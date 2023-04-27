@@ -65,7 +65,7 @@ exports.getallusers = asyncHandler(async (req, res) => {
             ]
         } :
         {}
-    const users = await USER.find(keyword).find({ _id: { $ne: req.user._id } });
+    const users = await USER.find(keyword).find({ _id: { $ne: req.user } });
     res.json({
         users
     })
