@@ -5,7 +5,6 @@ import { AvatarGenerator } from 'random-avatar-generator'
 import { toast } from 'react-toastify';
 import axios from 'axios'
 
-
 export default function RegisterUser() {
     const navigate = useNavigate();
     const [name, setname] = useState('')
@@ -16,8 +15,13 @@ export default function RegisterUser() {
     const [avatar, setavatar] = useState('')
 
     useEffect(() => {
+        const userinfo = localStorage.getItem('userinfo');
+        if (userinfo) {
+            navigate('/')
+        }
+
         Generate();
-    }, [])
+    }, [navigate])
 
     function Generate() {
         const generator = new AvatarGenerator();
