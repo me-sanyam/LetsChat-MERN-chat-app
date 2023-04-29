@@ -1,19 +1,11 @@
-body {
-  font-family: 'Kalam', cursive;
-}
-
-#Wrapper {
-  background-image: url('../public/Background.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  width: 100%;
-  height: 100vh;
-}
-
-#OpeningText {
-  font-family: 'Caveat', cursive;
-  color: white;
+:root {
+  /* --First: #112031; */
+  --First: #000000;
+  /* --Second: #394867; */
+  --Second: #222831;
+  --Third: #9BA4B5;
+  --Fourth: #F1F6F9;
+  --LiteThird: #9ba4b54d;
 }
 
 textarea:focus,
@@ -28,8 +20,33 @@ input[type=number]:focus,
 [type=email].form-control:focus,
 [type=tel].form-control:focus,
 [contenteditable].form-control:focus {
-  box-shadow: 0 0 0 0;
+  box-shadow: none;
+  outline: none;
+  border: 1px solid white;
 }
+
+body {
+  font-family: 'Kalam', cursive;
+  background-color: var(--First);
+  color: var(--Fourth);
+}
+
+/* Login and Register page */
+
+#Wrapper {
+  background-image: url('../public/Register_bg.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  width: 100%;
+  height: 100vh;
+}
+
+#OpeningText {
+  font-family: 'Caveat', cursive;
+  color: white;
+}
+
 
 #Minor_Wrapper {
   width: 400px;
@@ -58,4 +75,54 @@ input[type=number]:focus,
 #inpform input[type=text]:focus,
 #inpform input[type=password]:focus {
   border-bottom: 1px solid #0d6efd;
+}
+
+/* Home Page */
+
+.navbar {
+  background-color: var(--Second);
+}
+
+#sidebar {
+  background-color: var(--Second);
+}
+
+.btn-close {
+  background-color: var(--Fourth);
+}
+
+.styled {
+  background-color: var(--First);
+  border: 1px solid var(--LiteThird);
+  color: var(--Fourth);
+}
+
+.styled::placeholder {
+  color: var(--Third);
+}
+
+.styled:focus {
+  background-color: var(--First);
+  border: 1px solid var(--LiteThird);
+  color: var(--Fourth);
+}
+
+.dropstart {
+  background-color: var(--Second);
+}
+
+.dropstart-btn {
+  background-color: var(--Fourth);
+}
+
+.dropdown-menu {
+  background-color: var(--Fourth);
+}
+
+.dropdown-menu>li>a:hover {
+  background-color: var(--Third);
+}
+
+.modal-content {
+  background-color: var(--Second);
 }

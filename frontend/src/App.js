@@ -1,17 +1,15 @@
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LoginUser from "./Components/Login";
-import RegisterUser from "./Components/Register";
-import Home from "./Components/Home";
+import Account from "./Pages/Account";
+import Home from "./Pages/Home";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path='/' exact element={<Home />} />
-        <Route path='/Login' element={<LoginUser />} />
-        <Route path='/SignUp' element={<RegisterUser />} />
+        <Route path='/Lets-Chat' exact element={<Home />} />
+        <Route path='/' element={<Account />} />
       </Routes>
       <ToastContainer
         position="top-right"

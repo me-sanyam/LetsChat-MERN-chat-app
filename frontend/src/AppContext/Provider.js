@@ -3,17 +3,18 @@ import { useNavigate } from "react-router-dom";
 
 const Appcontext = createContext();
 
-export default function ContextProvider({ Children }) {
+export default function ContextProvider({ children }) {
     const [user, setuser] = useState();
     const navigate = useNavigate();
 
     useEffect(() => {
+
         const userinfo = JSON.parse(localStorage.getItem('UserInfo'))
         setuser(userinfo);
-        console.log(userinfo);
-        if (!userinfo) {
-            navigate('/signup');
+        if (userinfo === null) {
+            navigate("/");
         }
+
     }, [navigate]);
 
     return (
@@ -23,12 +24,12 @@ export default function ContextProvider({ Children }) {
                 setuser
             }}
         >
-            {Children}
+            {children}
         </Appcontext.Provider >
     )
 }
 
-export const AppStates = () => {
+export const UseAppStates = () => {
     return useContext(Appcontext);
 }
 
