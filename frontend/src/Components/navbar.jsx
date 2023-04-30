@@ -1,17 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BsSearch } from "react-icons/bs";
 import { UseAppStates } from '../AppContext/Provider';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import UserComponent from './usercomponent';
 
 export default function Navbar() {
     const navigate = useNavigate();
-    const { user } = UseAppStates();
+    const [search, setsearch] = useState('')
+    const [searchresult, setsearchresult] = useState([])
+
+    const { user, setselectedchats } = UseAppStates();
 
     const logouthandler = () => {
         localStorage.removeItem('UserInfo');
         navigate("/");
         toast.success('Logged out successfully.')
+    }
+
+    const handlesearch = async (e) => {
+        e.preventDefault();
+        if (!search) {
+            return
+        } else {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
+                }
+                const { data } = await axios.get(`http://localhost:5000/api?search=${search}`, config);
+                setsearchresult(data.users)
+            } catch (err) {
+                toast.error(err);
+                return
+            }
+        }
+    }
+
+
+    const accessChat = async (id) => {
+        try {
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${user.token}`
+                }
+            }
+
+            const { data } = await axios.post('http://localhost:5000/api/chats', { user_id: id }, config)
+            setselectedchats(data);
+        } catch (err) {
+            toast.error(err);
+            return
+        }
     }
 
     return (
@@ -58,13 +101,34 @@ export default function Navbar() {
                     <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
                 <div className="offcanvas-body">
-                    <form className="col-12">
+                    <form className="col-12 d-flex" onSubmit={(e) => handlesearch(e)}>
                         <input
                             type="text"
                             className="form-control styled"
                             placeholder="Search User"
+                            value={search}
+                            onChange={(e) => setsearch(e.target.value)}
                         />
+                        <button className='btn btn-secondary ms-2'>Go</button>
                     </form>
+                    <div className="col-12 mt-3">
+                        <div className="row px-3">
+                            {
+                                searchresult && searchresult.map(user => {
+                                    return (
+                                        <UserComponent
+                                            avatar={user.avatar}
+                                            key={user._id}
+                                            username={user.name}
+                                            email={user.email}
+                                            handleFunction={() => accessChat(user._id)}
+                                        />
+                                    );
+                                })
+                            }
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -85,6 +149,11 @@ export default function Navbar() {
                                 <p className='mb-0 mt-2' style={{ fontSize: "1.1rem" }}>{user.user.name}</p>
                             </div>
                         }
+
+
+                        <div className="modal-footer">
+                            <button className="btn btn-secondary text-dark" data-bs-dismiss="modal">close</button>
+                        </div>
                     </div>
                 </div>
             </div>

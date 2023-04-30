@@ -126,3 +126,29 @@ body {
 .modal-content {
   background-color: var(--Second);
 }
+
+.UserComponent {
+  background-color: var(--First);
+  border-radius: 5px;
+  color: var(--Third);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.UserComponent:hover {
+  background-color: var(--Third);
+  color: var(--First);
+}
+
+/* mychats page */
+
+.MyChats {
+  background-color: var(--Second);
+  border-radius: 5px;
+}
+
+.ChatUser {
+  background-color: var(--First);
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -5,8 +5,11 @@ const Appcontext = createContext();
 
 export default function ContextProvider({ children }) {
     const [user, setuser] = useState();
-    const navigate = useNavigate();
+    const [chats, setchats] = useState();
+    const [selectedchats, setselectedchats] = useState();
 
+    const navigate = useNavigate();
+    
     useEffect(() => {
 
         const userinfo = JSON.parse(localStorage.getItem('UserInfo'))
@@ -21,7 +24,11 @@ export default function ContextProvider({ children }) {
         <Appcontext.Provider
             value={{
                 user,
-                setuser
+                setuser,
+                selectedchats,
+                setselectedchats,
+                chats,
+                setchats
             }}
         >
             {children}

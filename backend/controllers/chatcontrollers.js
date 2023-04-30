@@ -55,7 +55,6 @@ exports.fetchchats = asynchandler(async (req, res) => {
         //         })
         //         res.status(200).send(results);
         //     })
-
         let results = await CHAT.find({ users: { $elemMatch: { $eq: req.user._id } } })
             .populate('users', '-password')
             .populate('groupAdmin', '-password')
@@ -149,7 +148,7 @@ exports.addtogroup = asynchandler(async (req, res) => {
         } else {
             res.status(400).json({ message: "Chat not found" })
         }
-        
+
     } else {
         res.status(400).json({ message: "Only Admin can Add People to group." })
     }
