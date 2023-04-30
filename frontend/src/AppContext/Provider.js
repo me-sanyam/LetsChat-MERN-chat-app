@@ -9,7 +9,7 @@ export default function ContextProvider({ children }) {
     const [selectedchats, setselectedchats] = useState();
 
     const navigate = useNavigate();
-    
+
     useEffect(() => {
 
         const userinfo = JSON.parse(localStorage.getItem('UserInfo'))
@@ -19,7 +19,7 @@ export default function ContextProvider({ children }) {
         }
 
     }, [navigate]);
-
+    
     return (
         <Appcontext.Provider
             value={{

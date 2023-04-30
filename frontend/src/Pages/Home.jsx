@@ -24,7 +24,7 @@ export default function Home() {
 
     return (
         <>
-            <Navbar />
+            {/* <Navbar />
             <div className="container-fluid">
                 <div className="row px-3 pt-4 d-flex justify-content-evenly">
                     {
@@ -34,6 +34,32 @@ export default function Home() {
                                 <MyChats display={"none"} />
                                 <ChatBox />
                             </>
+                            :
+                            <>
+                                <MyChats />
+                                <ChatBox display={'none'} />
+                            </>
+                    }
+                </div>
+            </div> */}
+
+            <Navbar />
+            <div className="container-fluid">
+                <div className="row px-3 py-4 d-flex justify-content-evenly">
+                    {
+                        (windowWidth <= 768)
+                            ?
+                            selectedchats
+                                ?
+                                <>
+                                    <MyChats display={"none"} />
+                                    <ChatBox />
+                                </>
+                                :
+                                <>
+                                    <MyChats />
+                                    <ChatBox display={'none'} />
+                                </>
                             :
                             <>
                                 <MyChats />

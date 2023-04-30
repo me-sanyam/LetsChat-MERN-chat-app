@@ -8,6 +8,20 @@
   --LiteThird: #9ba4b54d;
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--First);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--Second);
+}
+
+
+
 textarea:focus,
 textarea.form-control:focus,
 input.form-control:focus,
@@ -85,6 +99,7 @@ body {
 
 #sidebar {
   background-color: var(--Second);
+  overflow-y: scroll;
 }
 
 .btn-close {
@@ -145,10 +160,12 @@ body {
 .MyChats {
   background-color: var(--Second);
   border-radius: 5px;
+  height: 85.3vh;
+  overflow-y: scroll;
 }
 
 .ChatUser {
   background-color: var(--First);
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
 }
