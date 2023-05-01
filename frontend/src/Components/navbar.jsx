@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BsSearch } from "react-icons/bs";
-import { UseAppStates } from '../AppContext/Provider';
+import { useAppStates } from '../AppContext/Provider';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -11,7 +11,7 @@ export default function Navbar() {
     const [search, setsearch] = useState('')
     const [searchresult, setsearchresult] = useState([])
 
-    const { user, setselectedchats } = UseAppStates();
+    const { user, setselectedchats } = useAppStates();
 
     const logouthandler = () => {
         localStorage.removeItem('UserInfo');

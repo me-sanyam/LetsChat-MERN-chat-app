@@ -36,7 +36,7 @@ export default function ContextProvider({ children }) {
     )
 }
 
-export const UseAppStates = () => {
+export const useAppStates = () => {
     return useContext(Appcontext);
 }
 

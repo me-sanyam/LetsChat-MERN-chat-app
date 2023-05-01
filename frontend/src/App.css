@@ -159,6 +159,7 @@ body {
 
 .MyChats {
   background-color: var(--Second);
+  border: 2px solid var(--Second);
   border-radius: 5px;
   height: 85.3vh;
   overflow-y: scroll;
@@ -168,4 +169,21 @@ body {
   background-color: var(--First);
   border-radius: 8px;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.ChatUser:hover {
+  background-color: var(--Third);
+  color: var(--First);
+}
+
+#CreateGrpInp {
+  background-color: var(--First);
+  color: var(--Third);
+  border: 1px solid var(--LiteThird);
+}
+
+.badge {
+  background-color: var(--Fourth);
+  color: var(--First);
 }

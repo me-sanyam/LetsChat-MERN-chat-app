@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../Components/navbar";
 import MyChats from "../Components/mychats";
 import ChatBox from '../Components/Chatbox';
-import { UseAppStates } from "../AppContext/Provider";
+import { useAppStates } from "../AppContext/Provider";
 
 export default function Home() {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    const { selectedchats } = UseAppStates();
+    const { selectedchats } = useAppStates();
 
     useEffect(() => {
         const handleWindowResize = () => {
