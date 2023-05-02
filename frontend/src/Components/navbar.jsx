@@ -98,7 +98,13 @@ export default function Navbar() {
             <div className="offcanvas offcanvas-start" id="sidebar">
                 <div className="offcanvas-header">
                     <h5 className="offcanvas-title" id="offcanvasExampleLabel">Lets-Chat Search</h5>
-                    <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    <button
+                        type="button"
+                        className="btn-close btn-close-white text-reset"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                        onClick={() => { setsearch(''); setsearchresult([]) }}
+                    ></button>
                 </div>
                 <div className="offcanvas-body">
                     <form className="col-12 d-flex" onSubmit={(e) => handlesearch(e)}>
@@ -109,7 +115,7 @@ export default function Navbar() {
                             value={search}
                             onChange={(e) => setsearch(e.target.value)}
                         />
-                        <button className='btn btn-secondary ms-2'>Go</button>
+                        <button className='btn btn-light ms-2'>Go</button>
                     </form>
                     <div className="col-12 mt-3">
                         <div className="row px-3">

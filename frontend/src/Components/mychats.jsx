@@ -16,7 +16,7 @@ export default function MyChats({ display }) {
 
     const { user, chats, setchats } = useAppStates();
 
-    const handlefetchChats = async () => {
+    const fetchChats = async () => {
         try {
             const config = {
                 headers: {
@@ -33,12 +33,11 @@ export default function MyChats({ display }) {
         }
     }
 
-    handlefetchChats();
+    fetchChats();
 
     useEffect(() => {
         SetLoggedUser(JSON.parse(localStorage.getItem('UserInfo')));
     }, [])
-
 
     const handleUserSearch = async (e) => {
         e.preventDefault();
@@ -111,9 +110,14 @@ export default function MyChats({ display }) {
                             <h4 className="modal-title">Create Group</h4>
                             <button
                                 type="button"
-                                className="btn-close"
+                                className="btn-close btn-close-white"
                                 data-bs-dismiss="modal"
-                                onClick={() => { setsearch(''); setsearchresult([]); setgroupmembers([]) }}
+                                onClick={() => {
+                                    setsearch('');
+                                    setsearchresult([]);
+                                    setgroupmembers([]);
+                                    setgroupname('')
+                                }}
                             ></button>
                         </div>
 
@@ -180,7 +184,7 @@ export default function MyChats({ display }) {
                         </div>
                         <div className="modal-footer">
                             <button
-                                className="btn btn-secondary text-dark"
+                                className="btn btn-light"
                                 onClick={handleGroupCreation}
                             >
                                 create
@@ -196,9 +200,11 @@ export default function MyChats({ display }) {
                     <button
                         data-bs-toggle='modal'
                         data-bs-target='#CreateGroupModal'
-                        className="btn btn-secondary mt-2"
+                        className="btn btn-light mt-2"
                         style={{ width: "150px", height: "35px" }}
-                    >Create Group +</button>
+                    >
+                        Create Group +
+                    </button>
                 </div>
                 {chats && (!loading) ?
                     chats.map(chat => {
@@ -235,7 +241,6 @@ export default function MyChats({ display }) {
                                             :
                                             // <p className="mb-0"><strong>{(getSender(loggedUser, chat.users)).name}</strong></p>
                                             <p className="mb-0"><strong>{(loggedUser.user._id !== chat.users[0]._id) ? chat.users[0].name : chat.users[1].name}</strong></p>
-
                                     }
                                 </div>
                             </div>

@@ -102,10 +102,6 @@ body {
   overflow-y: scroll;
 }
 
-.btn-close {
-  background-color: var(--Fourth);
-}
-
 .styled {
   background-color: var(--First);
   border: 1px solid var(--LiteThird);
@@ -151,7 +147,7 @@ body {
 }
 
 .UserComponent:hover {
-  background-color: var(--Third);
+  background-color: var(--Fourth);
   color: var(--First);
 }
 
@@ -173,7 +169,7 @@ body {
 }
 
 .ChatUser:hover {
-  background-color: var(--Third);
+  background-color: var(--Fourth);
   color: var(--First);
 }
 
@@ -181,6 +177,11 @@ body {
   background-color: var(--First);
   color: var(--Third);
   border: 1px solid var(--LiteThird);
+}
+
+#CreateGrpInp:focus {
+  color: var(--Fourth);
+  border: 1px solid var(--Fourth);
 }
 
 .badge {
