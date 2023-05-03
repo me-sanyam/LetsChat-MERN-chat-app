@@ -145,7 +145,7 @@ export default function Navbar() {
 
                         <div className="modal-header">
                             <h4 className="modal-title">Profile</h4>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
+                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
 
                         {user &&

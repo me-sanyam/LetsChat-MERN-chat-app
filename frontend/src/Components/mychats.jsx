@@ -6,7 +6,7 @@ import GroupImage from "../Group.png"
 // import { getSender } from "../ChatLogic";
 import UserComponent from "./usercomponent";
 
-export default function MyChats({ display }) {
+export default function MyChats() {
     const [loading, setloading] = useState(true);
     const [loggedUser, SetLoggedUser] = useState();
     const [search, setsearch] = useState('');
@@ -14,7 +14,7 @@ export default function MyChats({ display }) {
     const [groupmembers, setgroupmembers] = useState([]);
     const [groupname, setgroupname] = useState('');
 
-    const { user, chats, setchats } = useAppStates();
+    const { user, chats, setchats, selectedchats, setselectedchats } = useAppStates();
 
     const fetchChats = async () => {
         try {
@@ -87,7 +87,6 @@ export default function MyChats({ display }) {
                     Authorization: `Bearer ${user.token}`
                 }
             }
-            setgroupmembers(groupmembers.push(user.user));
             const { data } = await axios.post('http://localhost:5000/api/chats/group', { users: JSON.stringify(groupmembers), groupname }, config);
             setchats([data, ...chats]);
             setsearch('');
@@ -194,7 +193,16 @@ export default function MyChats({ display }) {
                 </div>
             </div >
 
-            <div className="col-md-4 col-lg-4 col-xl-3 MyChats py-1 px-2" style={{ display: display }}>
+
+            <div
+                className={
+                    (!selectedchats)
+                        ?
+                        "col-md-4 col-lg-4 col-xl-3 MyChats py-1 px-2"
+                        :
+                        "d-none d-md-block col-md-4 col-lg-4 col-xl-3 MyChats py-1 px-2"
+                }
+            >
                 <div className="d-flex justify-content-between">
                     <h3 className="m-2 d-inline">My Chats</h3>
                     <button
@@ -212,6 +220,7 @@ export default function MyChats({ display }) {
                             <div
                                 key={chat._id}
                                 className="col-12 d-flex align-items-center ChatUser p-3 mt-2"
+                                onClick={() => setselectedchats(chat)}
                             >
                                 {
                                     (chat.isGroupChat)
@@ -247,7 +256,7 @@ export default function MyChats({ display }) {
                         );
                     })
                     :
-                    <p>loading</p>
+                    <p className="mt-2 text-center">loading</p>
                 }
             </div>
         </>
