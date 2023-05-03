@@ -80,6 +80,7 @@ export default function ChatBox() {
                         <div className="col-12 d-flex justify-content-evenly align-items-center" style={{ height: "60px" }}>
                             <button
                                 className="btn btn-sm btn-light me-3 d-md-none"
+                                onClick={() => setselectedchats()}
                             >
                                 <MdOutlineKeyboardBackspace size={20} />
                             </button>
@@ -94,7 +95,6 @@ export default function ChatBox() {
                                 className="btn btn-sm btn-light"
                                 data-bs-toggle="modal"
                                 data-bs-target="#UserProfileModal"
-                                onClick={() => setselectedchats()}
                             >
                                 <BsFillEyeFill />
                             </button>
