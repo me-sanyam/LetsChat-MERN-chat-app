@@ -3,7 +3,7 @@ import { useAppStates } from "../AppContext/Provider";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import GroupImage from "../Group.png"
-// import { getSender } from "../ChatLogic";
+import { getSender } from '../ChatLogic';
 import UserComponent from "./usercomponent";
 
 export default function MyChats() {
@@ -214,7 +214,7 @@ export default function MyChats() {
                         Create Group +
                     </button>
                 </div>
-                {chats && (!loading) ?
+                {user && chats && (!loading) ?
                     chats.map(chat => {
                         return (
                             <div
@@ -234,8 +234,7 @@ export default function MyChats() {
                                             style={{ borderRadius: "50%" }} />
                                         :
                                         <img
-                                            src={(loggedUser.user._id !== chat.users[0]._id) ? chat.users[0].avatar : chat.users[1].avatar}
-                                            // src={(getSender(loggedUser, chat.users)).avatar}
+                                            src={(getSender(loggedUser, chat.users)).avatar}
                                             alt="profile"
                                             width="50px"
                                             height="auto"
@@ -248,8 +247,7 @@ export default function MyChats() {
                                             ?
                                             <p className="mb-0"><strong>{chat.ChatName}</strong></p>
                                             :
-                                            // <p className="mb-0"><strong>{(getSender(loggedUser, chat.users)).name}</strong></p>
-                                            <p className="mb-0"><strong>{(loggedUser.user._id !== chat.users[0]._id) ? chat.users[0].name : chat.users[1].name}</strong></p>
+                                            <p className="mb-0"><strong>{(getSender(loggedUser, chat.users)).name}</strong></p>
                                     }
                                 </div>
                             </div>

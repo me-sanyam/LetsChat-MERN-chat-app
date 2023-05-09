@@ -188,3 +188,7 @@ body {
   background-color: var(--Fourth);
   color: var(--First);
 }
+
+.MessageBox {
+  background-color: var(--First);
+}

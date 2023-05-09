@@ -1,7 +1,8 @@
 import React from "react";
 import { useAppStates } from "../AppContext/Provider";
-import { BsFillEyeFill } from 'react-icons/bs'
+import { BsFillEyeFill } from 'react-icons/bs';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
+import { getSender } from '../ChatLogic';
 
 export default function ChatBox() {
     const { user, selectedchats, setselectedchats } = useAppStates();
@@ -10,7 +11,7 @@ export default function ChatBox() {
         <>
             <div className="modal" id="UserProfileModal">
                 <div className="modal-dialog modal-dialog-centered">
-                    {selectedchats &&
+                    {user && selectedchats &&
 
                         <div className="modal-content">
                             <div className="modal-header">
@@ -29,32 +30,26 @@ export default function ChatBox() {
                                         ?
                                         <div className="d-flex flex-column justify-content-center align-items-center">
                                             <img
-                                                src={(user.user._id !== selectedchats.users[0]) ? selectedchats.users[0].avatar : selectedchats.users[1].avatar}
+                                                src={(getSender(user, selectedchats.users)).avatar}
                                                 width='150px'
                                                 height="auto"
                                                 alt="profile."
                                             />
-                                            <h4 className="mt-2 mb-0"><strong>{(user.user._id !== selectedchats.users[0]) ? selectedchats.users[0].name : selectedchats.users[1].name}</strong></h4>
-                                            <p className='my-2' style={{ fontSize: "1.2rem" }}>{(user.user._id !== selectedchats.users[0]) ? selectedchats.users[0].email : selectedchats.users[1].email}</p>
+                                            <h4 className="mt-2 mb-0"><strong>{(getSender(user, selectedchats.users)).name}</strong></h4>
+                                            <p className='my-2' style={{ fontSize: "1.2rem" }}>{(getSender(user, selectedchats.users)).email}</p>
                                         </div>
                                         :
                                         <>
                                             <p className="mt-2 mb-0">All Members</p>
                                             {selectedchats.users.map((user) => {
                                                 return (
-                                                    <div className="ChatUser py-1 px-3 mb-1 d-flex align-items-center">
-                                                        <img
-                                                            src={user.avatar}
-                                                            width='35px'
-                                                            height="auto"
-                                                            className="mb-1"
-                                                            alt="profile."
-                                                        />
-                                                        <div className="ms-3">
-                                                            <p className="mb-0"><strong>{user.email}</strong></p>
-                                                            <p className="mb-0">{user.name}</p>
-                                                        </div>
-                                                    </div>
+                                                    <span
+                                                        key={user._id}
+                                                        className="badge p-2 m-1"
+                                                    >
+                                                        {user.name}
+                                                    </span>
+
                                                 )
                                             })}
                                         </>

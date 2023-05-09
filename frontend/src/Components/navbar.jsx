@@ -156,9 +156,8 @@ export default function Navbar() {
                             </div>
                         }
 
-
                         <div className="modal-footer">
-                            <button className="btn btn-secondary text-dark" data-bs-dismiss="modal">close</button>
+                            <button className="btn btn-light text-dark" data-bs-dismiss="modal">close</button>
                         </div>
                     </div>
                 </div>
