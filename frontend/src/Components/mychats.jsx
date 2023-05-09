@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useAppStates } from "../AppContext/Provider";
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import GroupImage from "../Group.png"
 import { getSender } from '../ChatLogic';
 import UserComponent from "./usercomponent";
 
@@ -226,7 +225,7 @@ export default function MyChats() {
                                     (chat.isGroupChat)
                                         ?
                                         <img
-                                            src={GroupImage}
+                                            src={`https://api.dicebear.com/6.x/thumbs/svg?seed=${chat.ChatName}`}
                                             alt="Group_image"
                                             width="50px"
                                             height="auto"
@@ -234,7 +233,7 @@ export default function MyChats() {
                                             style={{ borderRadius: "50%" }} />
                                         :
                                         <img
-                                            src={(getSender(loggedUser, chat.users)).avatar}
+                                            src={getSender(loggedUser, chat.users).avatar}
                                             alt="profile"
                                             width="50px"
                                             height="auto"
@@ -247,7 +246,7 @@ export default function MyChats() {
                                             ?
                                             <p className="mb-0"><strong>{chat.ChatName}</strong></p>
                                             :
-                                            <p className="mb-0"><strong>{(getSender(loggedUser, chat.users)).name}</strong></p>
+                                            <p className="mb-0"><strong>{getSender(loggedUser, chat.users).name}</strong></p>
                                     }
                                 </div>
                             </div>

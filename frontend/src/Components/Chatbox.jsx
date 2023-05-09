@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppStates } from "../AppContext/Provider";
-import { BsFillEyeFill } from 'react-icons/bs';
+import { BsEmojiSmile, BsSend, BsFillEyeFill } from 'react-icons/bs';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import { getSender } from '../ChatLogic';
 
@@ -30,13 +30,13 @@ export default function ChatBox() {
                                         ?
                                         <div className="d-flex flex-column justify-content-center align-items-center">
                                             <img
-                                                src={(getSender(user, selectedchats.users)).avatar}
+                                                src={getSender(user, selectedchats.users).avatar}
                                                 width='150px'
                                                 height="auto"
                                                 alt="profile."
                                             />
-                                            <h4 className="mt-2 mb-0"><strong>{(getSender(user, selectedchats.users)).name}</strong></h4>
-                                            <p className='my-2' style={{ fontSize: "1.2rem" }}>{(getSender(user, selectedchats.users)).email}</p>
+                                            <h4 className="mt-2 mb-0"><strong>{getSender(user, selectedchats.users).name}</strong></h4>
+                                            <p className='my-2' style={{ fontSize: "1.2rem" }}>{getSender(user, selectedchats.users).email}</p>
                                         </div>
                                         :
                                         <>
@@ -53,6 +53,18 @@ export default function ChatBox() {
                                                 )
                                             })}
                                         </>
+                                }
+                            </div>
+
+                            <div className="modal-footer">
+                                {!selectedchats.isGroupChat
+                                    ?
+                                    <button className="btn btn-light text-dark" data-bs-dismiss="modal">close</button>
+                                    :
+                                    <>
+                                        <button className="btn btn-light text-dark" data-bs-dismiss="modal">close</button>
+                                        <button className="btn btn-danger">Exit Group</button>
+                                    </>
                                 }
                             </div>
                         </div>
@@ -72,7 +84,10 @@ export default function ChatBox() {
                 {selectedchats
                     ?
                     <div className="row">
-                        <div className="col-12 d-flex justify-content-evenly align-items-center" style={{ height: "60px" }}>
+                        <div
+                            className="col-12 d-flex justify-content-evenly align-items-center"
+                            style={{ height: "60px" }}
+                        >
                             <button
                                 className="btn btn-sm btn-light me-3 d-md-none"
                                 onClick={() => setselectedchats()}
@@ -84,7 +99,7 @@ export default function ChatBox() {
                                     ?
                                     <h4 className="mb-0 flex-grow-1"><strong>{selectedchats.ChatName}</strong></h4>
                                     :
-                                    <h4 className="mb-0 flex-grow-1"><strong>{(user.user._id !== selectedchats.users[0]) ? selectedchats.users[0].name : selectedchats.users[1].name}</strong></h4>
+                                    <h4 className="mb-0 flex-grow-1"><strong>{getSender(user, selectedchats.users).name}</strong></h4>
                             }
                             <button
                                 className="btn btn-sm btn-light"
@@ -94,7 +109,7 @@ export default function ChatBox() {
                                 <BsFillEyeFill />
                             </button>
                         </div>
-                        <hr style={{ width: "100%", color: "black" }} />
+
                     </div>
                     :
                     <div className="row d-flex align-items-center w-100">
