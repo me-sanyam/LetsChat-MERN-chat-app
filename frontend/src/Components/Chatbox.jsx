@@ -1,11 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAppStates } from "../AppContext/Provider";
-import { BsEmojiSmile, BsSend, BsFillEyeFill } from 'react-icons/bs';
+import { BsFillEyeFill } from 'react-icons/bs';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import { getSender } from '../ChatLogic';
+import UserComponent from "./usercomponent";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function ChatBox() {
+    const [GroupName, SetGroupName] = useState('');
+    const [UserName, SetUserName] = useState('');
+    const [searchresult, setsearchresult] = useState([]);
     const { user, selectedchats, setselectedchats } = useAppStates();
+
+    const handleUserSearch = async (e) => {
+        e.preventDefault();
+        if (!UserName) {
+            toast.error('Please enter username or email to search.');
+            return
+        }
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            }
+            const { data } = await axios.get(`http://localhost:5000/api?search=${UserName}`, config);
+            setsearchresult(data.users)
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message);
+        }
+    }
+
+    const handleAddition = async (newuser) => {
+        console.log(selectedchats.groupAdmin._id, user.user._id);
+        if (selectedchats.groupAdmin._id === user.user._id) {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
+                }
+                const { data } = await axios.put('http://localhost:5000/api/chats/groupadd',
+                    {
+                        chatid: selectedchats._id,
+                        userid: newuser._id
+                    },
+                    config
+                );
+                toast.success(data.message);
+                setselectedchats([]);
+            } catch (error) {
+                toast.error('Failed to Add new user to group');
+            }
+        }
+        else {
+            toast.error('Only Admins Update Group Chat');
+        }
+    }
 
     return (
         <>
@@ -15,7 +68,12 @@ export default function ChatBox() {
 
                         <div className="modal-content">
                             <div className="modal-header">
-                                <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                <button
+                                    type="button"
+                                    className="btn-close btn-close-white"
+                                    data-bs-dismiss="modal"
+                                    onClick={() => { setsearchresult([]); SetUserName('') }}
+                                ></button>
                             </div>
                             <div className="modal-body">
                                 {
@@ -48,10 +106,49 @@ export default function ChatBox() {
                                                         className="badge p-2 m-1"
                                                     >
                                                         {user.name}
+                                                        <button
+                                                            className="btn btn-close ms-2"
+                                                            style={{ width: "5px", height: "6px" }}
+                                                        ></button>
                                                     </span>
-
                                                 )
                                             })}
+                                            <input
+                                                type="text"
+                                                className="form-control mt-2 mb-1"
+                                                id="CreateGrpInp"
+                                                placeholder="Group Name"
+                                                value={GroupName}
+                                                name="GroupName"
+                                                onChange={(e) => SetGroupName(e.target.value)}
+                                            />
+
+                                            <form onSubmit={handleUserSearch}>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="CreateGrpInp"
+                                                    name="UserName"
+                                                    placeholder="Search Users"
+                                                    value={UserName}
+                                                    onChange={(e) => SetUserName(e.target.value)}
+                                                />
+                                            </form>
+                                            <div className="mt-2">
+                                                {
+                                                    searchresult && searchresult.map(user => {
+                                                        return (
+                                                            <UserComponent
+                                                                avatar={user.avatar}
+                                                                key={user._id}
+                                                                username={user.name}
+                                                                email={user.email}
+                                                                handleFunction={() => handleAddition(user)}
+                                                            />
+                                                        );
+                                                    })
+                                                }
+                                            </div>
                                         </>
                                 }
                             </div>
@@ -62,8 +159,13 @@ export default function ChatBox() {
                                     <button className="btn btn-light text-dark" data-bs-dismiss="modal">close</button>
                                     :
                                     <>
-                                        <button className="btn btn-light text-dark" data-bs-dismiss="modal">close</button>
+                                        <button
+                                            className="btn btn-light text-dark"
+                                            data-bs-dismiss="modal"
+                                            onClick={() => { setsearchresult([]); SetUserName('') }}
+                                        >close</button>
                                         <button className="btn btn-danger">Exit Group</button>
+                                        <button className="btn btn-success">Update Group</button>
                                     </>
                                 }
                             </div>
@@ -108,6 +210,9 @@ export default function ChatBox() {
                             >
                                 <BsFillEyeFill />
                             </button>
+                        </div>
+                        <div className="MessageBox">
+
                         </div>
 
                     </div>

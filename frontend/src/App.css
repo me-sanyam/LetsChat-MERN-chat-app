@@ -189,8 +189,8 @@ body {
   color: var(--First);
 }
 
-.Chat {
-  background-color: var(--Second);
-  border: 2px solid var(--Second);
-  border-radius: 5px;
+.MessageBox {
+  background-color: var(--First);
+  overflow-y: hidden;
+  height: 100vh;
 }

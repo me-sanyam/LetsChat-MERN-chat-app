@@ -127,7 +127,7 @@ exports.renamegroupchat = asynchandler(async (req, res) => {
 
 exports.addtogroup = asynchandler(async (req, res) => {
     const { chatid, userid } = req.body;
-
+    console.log(req.body)
     const isadmin = await CHAT.find({ _id: chatid, groupAdmin: req.user });
 
     if (isadmin) {
