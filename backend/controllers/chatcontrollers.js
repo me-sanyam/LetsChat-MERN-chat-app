@@ -181,3 +181,23 @@ exports.removefromgroup = asynchandler(async (req, res) => {
     }
 
 })
+
+exports.exitgroup = asynchandler(async (req, res) => {
+    const { chatid, userid } = req.body;
+    const removed = await CHAT.findByIdAndUpdate(
+        chatid,
+        {
+            $pull: { users: userid },
+        },
+        {
+            new: true
+        }
+    ).populate('users', '-password')
+        .populate('groupAdmin', '-password');
+
+    if (removed) {
+        res.status(200).json({ message: "Group Chat left successfully." })
+    } else {
+        res.status(400).json({ message: "Chat not found" })
+    }
+})

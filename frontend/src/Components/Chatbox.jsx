@@ -112,6 +112,29 @@ export default function ChatBox() {
         }
     }
 
+
+    const HandleExit = async (UserID) => {
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
+                }
+            }
+            const { data } = await axios.put('http://localhost:5000/api/chats/group/exit',
+                {
+                    chatid: selectedchats._id,
+                    userid: UserID
+                },
+                config
+            );
+            toast.success(data.message);
+            setselectedchats([]);
+        } catch (error) {
+            toast.error('Failed to Remove user from group');
+        }
+    }
+
+
     return (
         <>
             <div className="modal" id="UserProfileModal">
@@ -218,7 +241,10 @@ export default function ChatBox() {
                                             data-bs-dismiss="modal"
                                             onClick={() => { setsearchresult([]); SetUserName('') }}
                                         >close</button>
-                                        <button className="btn btn-danger">Exit Group</button>
+                                        <button
+                                            className="btn btn-danger"
+                                            onClick={() => HandleExit(user.user._id)}
+                                        >Exit Group</button>
                                         <button
                                             className="btn btn-success"
                                             onClick={handleNameChange}
