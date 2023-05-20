@@ -29,12 +29,11 @@ export default function ChatBox() {
             setsearchresult(data.users)
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            toast.error("Failed to find users.");
         }
     }
 
     const handleAddition = async (newuser) => {
-        console.log(selectedchats.groupAdmin._id, user.user._id);
         if (selectedchats.groupAdmin._id === user.user._id) {
             try {
                 const config = {
@@ -49,14 +48,67 @@ export default function ChatBox() {
                     },
                     config
                 );
-                toast.success(data.message);
-                setselectedchats([]);
+                toast.success('User Added Successfully.');
+                setselectedchats(data);
             } catch (error) {
                 toast.error('Failed to Add new user to group');
             }
         }
         else {
             toast.error('Only Admins Update Group Chat');
+        }
+    }
+
+    const HandleRemove = async (UsertoRemove) => {
+        if (selectedchats.groupAdmin._id === user.user._id) {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
+                }
+                const { data } = await axios.put('http://localhost:5000/api/chats/group/remove',
+                    {
+                        chatid: selectedchats._id,
+                        userid: UsertoRemove._id
+                    },
+                    config
+                );
+                toast.success("User Removed Successfully.");
+                setselectedchats(data);
+            } catch (error) {
+                toast.error('Failed to Remove user from group');
+            }
+        }
+        else {
+            toast.error('Only Admins Update Group Chat');
+        }
+    }
+
+    const handleNameChange = async () => {
+        if (selectedchats.groupAdmin._id !== user.user._id) {
+            toast.error('Only Admin can Update Group Chat.')
+        }
+        else {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${user.token}`
+                    }
+                }
+                const { data } = await axios.put('http://localhost:5000/api/chats/rename',
+                    {
+                        chatid: selectedchats._id,
+                        UpdatedChatname: GroupName
+                    },
+                    config
+                );
+                toast.success('Group Chat Renamed Successfully.');
+                SetGroupName('')
+                setselectedchats(data);
+            } catch (err) {
+                toast.error('Failed to Update Group Chat.')
+            }
         }
     }
 
@@ -107,8 +159,10 @@ export default function ChatBox() {
                                                     >
                                                         {user.name}
                                                         <button
+                                                            type="button"
                                                             className="btn btn-close ms-2"
                                                             style={{ width: "5px", height: "6px" }}
+                                                            onClick={() => HandleRemove(user)}
                                                         ></button>
                                                     </span>
                                                 )
@@ -165,7 +219,10 @@ export default function ChatBox() {
                                             onClick={() => { setsearchresult([]); SetUserName('') }}
                                         >close</button>
                                         <button className="btn btn-danger">Exit Group</button>
-                                        <button className="btn btn-success">Update Group</button>
+                                        <button
+                                            className="btn btn-success"
+                                            onClick={handleNameChange}
+                                        >Update Group</button>
                                     </>
                                 }
                             </div>

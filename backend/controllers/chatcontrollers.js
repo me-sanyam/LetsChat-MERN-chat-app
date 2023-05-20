@@ -106,28 +106,26 @@ exports.creategroupchat = asynchandler(async (req, res) => {
 })
 
 exports.renamegroupchat = asynchandler(async (req, res) => {
-    const { chatid, chatname } = req.body;
+    const { chatid, UpdatedChatname } = req.body;
     const updatechat = await CHAT.findByIdAndUpdate(
         chatid,
         {
-            ChatName: chatname
+            ChatName: UpdatedChatname
         },
         {
             new: true
         }
     ).populate('users', '-password')
         .populate('groupAdmin', '-password');
-
     if (!updatechat) {
         res.status(400).json({ message: 'Unable to rename group.' })
     } else {
-        res.status(200).json(updatechat)
+        res.status(200).send(updatechat)
     }
 })
 
 exports.addtogroup = asynchandler(async (req, res) => {
     const { chatid, userid } = req.body;
-    console.log(req.body)
     const isadmin = await CHAT.find({ _id: chatid, groupAdmin: req.user });
 
     if (isadmin) {
@@ -144,7 +142,36 @@ exports.addtogroup = asynchandler(async (req, res) => {
             .populate('groupAdmin', '-password');
 
         if (added) {
-            res.status(200).json({ message: "User successfully added to group." })
+            res.status(200).json(added)
+        } else {
+            res.status(400).json({ message: "Chat not found" })
+        }
+
+    } else {
+        res.status(400).json({ message: "Only Admin can Add People to group." })
+    }
+
+})
+
+exports.removefromgroup = asynchandler(async (req, res) => {
+    const { chatid, userid } = req.body;
+    const isadmin = await CHAT.find({ _id: chatid, groupAdmin: req.user });
+
+    if (isadmin) {
+
+        const removed = await CHAT.findByIdAndUpdate(
+            chatid,
+            {
+                $pull: { users: userid },
+            },
+            {
+                new: true
+            }
+        ).populate('users', '-password')
+            .populate('groupAdmin', '-password');
+
+        if (removed) {
+            res.status(200).json(removed)
         } else {
             res.status(400).json({ message: "Chat not found" })
         }

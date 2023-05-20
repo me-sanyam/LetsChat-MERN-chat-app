@@ -11,7 +11,6 @@ export default function ContextProvider({ children }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log(selectedchats);
         const userinfo = JSON.parse(localStorage.getItem('UserInfo'))
         setuser(userinfo);
         if (userinfo === null) {
