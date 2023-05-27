@@ -9,4 +9,7 @@ const {
 } = require('../controllers/messageController');
 
 
-router.route('/', authenticated, sendmessage)
+router.route('/').post(authenticated, sendmessage);
+router.route('/:chatID').get(authenticated, getallmessages);
+
+module.exports = router;
