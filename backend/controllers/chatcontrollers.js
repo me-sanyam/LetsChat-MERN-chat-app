@@ -42,19 +42,6 @@ exports.accesschat = asynchandler(async (req, res) => {
 
 exports.fetchchats = asynchandler(async (req, res) => {
     try {
-
-        // await CHAT.find({ users: { $elemMatch: { $eq: req.user._id } } })
-        //     .populate('users', '-password')
-        //     .populate('groupAdmin', '-password')
-        //     .populate('latestmessage')
-        //     .sort({ updatedAt: -1 })
-        //     .then(async (results) => {
-        //         results = await USER.populate(results, {
-        //             path: "latestmessage.sender",
-        //             select: "name avatar email",
-        //         })
-        //         res.status(200).send(results);
-        //     })
         let results = await CHAT.find({ users: { $elemMatch: { $eq: req.user._id } } })
             .populate('users', '-password')
             .populate('groupAdmin', '-password')
@@ -98,10 +85,10 @@ exports.creategroupchat = asynchandler(async (req, res) => {
             .populate('users', '-password')
             .populate('groupAdmin', '-password');
 
-        res.status(200).json(fullgroupchat);
+        res.status(200).json(fullgroupchat[0]);
 
     } catch (err) {
-        res.status(400).json({ err })
+        res.status(400).send(err);
     }
 })
 

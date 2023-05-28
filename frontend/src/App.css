@@ -1,26 +1,13 @@
 :root {
-  /* --First: #112031; */
-  --First: #000000;
-  /* --Second: #394867; */
-  --Second: #222831;
-  --Third: #9BA4B5;
-  --Fourth: #F1F6F9;
-  --LiteThird: #9ba4b54d;
+  --Gradient_Second: #922EF4;
+  --White: #ffffff;
+  --Black: #000000;
+  --Chrome: #DBE2E9;
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 0px;
 }
-
-::-webkit-scrollbar-track {
-  background-color: var(--First);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--Second);
-}
-
-
 
 textarea:focus,
 textarea.form-control:focus,
@@ -36,45 +23,48 @@ input[type=number]:focus,
 [contenteditable].form-control:focus {
   box-shadow: none;
   outline: none;
-  border: 1px solid white;
+  /* border: 1px solid white; */
 }
 
 body {
   font-family: 'Kalam', cursive;
-  background-color: var(--First);
-  color: var(--Fourth);
+  background-color: var(--Chrome);
+  color: var(--Black);
 }
 
 /* Login and Register page */
 
 #Wrapper {
-  background-image: url('../public/Register_bg.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
+  background: conic-gradient(from 315deg, #6439AD, #B91BF7);
   width: 100%;
   height: 100vh;
 }
 
 #OpeningText {
   font-family: 'Caveat', cursive;
-  color: white;
+  color: var(--White);
 }
-
 
 #Minor_Wrapper {
   width: 400px;
-  background-color: rgba(0, 0, 0, 0.704);
   border-radius: 5px;
+  background: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(9.7px);
+  -webkit-backdrop-filter: blur(9.7px);
+}
+
+#Minor_Wrapper h4 {
+  color: var(--Gradient_Second);
 }
 
 #inpform label {
   font-size: 1.1rem;
-  color: white;
+  color: var(--White);
 }
 
 #inpform input::placeholder {
-  color: rgba(220, 220, 220, 0.671);
+  color: var(--White);
 }
 
 #inpform input[type=text],
@@ -82,8 +72,8 @@ body {
   background: none;
   border: none;
   border-radius: 0%;
-  border-bottom: 1px solid white;
-  color: white;
+  border-bottom: 1px solid var(--White);
+  color: var(--White);
 }
 
 #inpform input[type=text]:focus,
@@ -94,103 +84,118 @@ body {
 /* Home Page */
 
 .navbar {
-  background-color: var(--Second);
+  background-color: var(--Gradient_Second);
 }
 
 #sidebar {
-  background-color: var(--Second);
+  background-color: var(--White);
   overflow-y: scroll;
 }
 
 .styled {
-  background-color: var(--First);
-  border: 1px solid var(--LiteThird);
-  color: var(--Fourth);
+  background-color: var(--Chrome);
+  border: 1px solid var(--Chrome);
+  color: var(--Black);
 }
 
 .styled::placeholder {
-  color: var(--Third);
+  color: var(--Black);
 }
 
 .styled:focus {
-  background-color: var(--First);
-  border: 1px solid var(--LiteThird);
-  color: var(--Fourth);
+  background-color: var(--Chrome);
+  border: 1px solid var(--Chrome);
+  color: var(--Black);
 }
 
-.dropstart {
-  background-color: var(--Second);
+.StyledButton {
+  background-color: var(--Gradient_Second);
+  color: var(--White);
 }
 
-.dropstart-btn {
-  background-color: var(--Fourth);
-}
-
-.dropdown-menu {
-  background-color: var(--Fourth);
+.StyledButton:focus,
+.StyledButton:hover,
+.StyledButton:active {
+  outline: none;
+  box-shadow: none;
+  color: var(--White);
 }
 
 .dropdown-menu>li>a:hover {
-  background-color: var(--Third);
-}
-
-.modal-content {
-  background-color: var(--Second);
+  background-color: var(--Chrome);
 }
 
 .UserComponent {
-  background-color: var(--First);
+  background-color: var(--Chrome);
   border-radius: 5px;
-  color: var(--Third);
+  color: var(--Black);
   cursor: pointer;
   transition: 0.2s;
 }
 
 .UserComponent:hover {
-  background-color: var(--Fourth);
-  color: var(--First);
+  background-color: var(--Gradient_Second);
+  color: var(--White);
 }
 
 /* mychats page */
+#OverFlowY {
+  overflow-y: scroll;
+  height: 100vh;
+  scrollbar-width: none;
+}
 
 .MyChats {
-  background-color: var(--Second);
-  border: 2px solid var(--Second);
+  background-color: var(--White);
   border-radius: 5px;
   height: 85.3vh;
-  overflow-y: scroll;
+  overflow-y: hidden;
 }
 
 .ChatUser {
-  background-color: var(--First);
+  background-color: var(--Chrome);
   border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
+  height: 75px;
 }
 
 .ChatUser:hover {
-  background-color: var(--Fourth);
-  color: var(--First);
-}
-
-#CreateGrpInp {
-  background-color: var(--First);
-  color: var(--Third);
-  border: 1px solid var(--LiteThird);
-}
-
-#CreateGrpInp:focus {
-  color: var(--Fourth);
-  border: 1px solid var(--Fourth);
+  background-color: var(--Gradient_Second);
+  color: var(--White);
 }
 
 .badge {
-  background-color: var(--Fourth);
-  color: var(--First);
+  background-color: var(--Gradient_Second);
+  color: var(--White);
+}
+
+.ChatBoxOpeningWrapper {
+  background-color: var(--Gradient_Second);
+  color: var(--White);
 }
 
 .MessageBox {
-  background-color: var(--First);
-  overflow-y: hidden;
-  height: 100vh;
+  background-color: var(--White);
+  overflow-y: scroll;
+  padding-bottom: 125px;
+  padding-top: 10px;
+}
+
+.FormBox {
+  position: absolute;
+  bottom: 0;
+  height: 55px;
+  background-color: var(--White);
+}
+
+#MessageInput {
+  background-color: var(--Chrome);
+  color: var(--Black);
+  border: 1px solid var(--Chrome);
+}
+
+#MessageInput:hover {
+  color: var(--Black);
+  border: 1px solid var(--Chrome);
 }

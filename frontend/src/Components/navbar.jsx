@@ -16,7 +16,8 @@ export default function Navbar() {
     const logouthandler = () => {
         localStorage.removeItem('UserInfo');
         navigate("/");
-        toast.success('Logged out successfully.')
+        setselectedchats();
+        toast('Logged out successfully.')
     }
 
     const handlesearch = async (e) => {
@@ -68,7 +69,7 @@ export default function Navbar() {
                     <h6 className='mb-0' style={{ fontWeight: "bold" }}>Lets-Chat</h6>
                     {user &&
                         <div className="dropstart me-1">
-                            <button className="btn dropdown-toggle dropstart-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button className="btn btn-light dropdown-toggle dropstart-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src={user.user.avatar} width='30px' height="auto" alt="profile." />
                             </button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -100,7 +101,7 @@ export default function Navbar() {
                     <h5 className="offcanvas-title" id="offcanvasExampleLabel">Lets-Chat Search</h5>
                     <button
                         type="button"
-                        className="btn-close btn-close-white text-reset"
+                        className="btn-close btn-close-dark text-reset"
                         data-bs-dismiss="offcanvas"
                         aria-label="Close"
                         onClick={() => { setsearch(''); setsearchresult([]) }}
@@ -115,7 +116,7 @@ export default function Navbar() {
                             value={search}
                             onChange={(e) => setsearch(e.target.value)}
                         />
-                        <button className='btn btn-light ms-2'>Go</button>
+                        <button className='btn ms-2 StyledButton'>Go</button>
                     </form>
                     <div className="col-12 mt-3">
                         <div className="row px-3">
@@ -139,13 +140,13 @@ export default function Navbar() {
             </div>
 
 
-            <div className="modal" id="myModal">
+            <div className="modal text-dark" id="myModal">
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
 
                         <div className="modal-header">
                             <h4 className="modal-title">Profile</h4>
-                            <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            <button type="button" className="btn-close btn-close-dark" data-bs-dismiss="modal"></button>
                         </div>
 
                         {user &&
@@ -157,7 +158,7 @@ export default function Navbar() {
                         }
 
                         <div className="modal-footer">
-                            <button className="btn btn-light text-dark" data-bs-dismiss="modal">close</button>
+                            <button className="btn StyledButton" data-bs-dismiss="modal">close</button>
                         </div>
                     </div>
                 </div>

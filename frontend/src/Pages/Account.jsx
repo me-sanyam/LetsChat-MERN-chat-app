@@ -39,7 +39,7 @@ export default function RegisterUser() {
                 }
             }
             const { data } = await axios.post('http://localhost:5000/api/login', { email, password }, config);
-            toast.success('User Login successfull.');
+            toast('User Login successfull.');
             navigate('/Lets-Chat');
             localStorage.setItem('UserInfo', JSON.stringify(data));
         } catch (error) {
@@ -57,7 +57,7 @@ export default function RegisterUser() {
                 }
             }
             const { data } = await axios.post('http://localhost:5000/api/signup', { name, email, password, avatar }, config);
-            toast.success('User signup successfull.');
+            toast('User signup successfull.');
             navigate('/Lets-Chat');
             localStorage.setItem('UserInfo', JSON.stringify(data));
         } catch (error) {
@@ -71,7 +71,7 @@ export default function RegisterUser() {
             <div className="row d-flex flex-column justify-content-center align-items-center w-100 h-100 m-0">
 
                 <div id="Minor_Wrapper" className="mb-2 py-3">
-                    <h4 className="m-0 text-center">Lets-Chat</h4>
+                    <h4 className="m-0 text-center text-white">Lets-Chat</h4>
                 </div>
 
                 <div id="Minor_Wrapper" className="py-4 px-4">
@@ -144,7 +144,7 @@ export default function RegisterUser() {
                                 />
                                 <p
                                     className="my-2"
-                                    style={{ color: "#0d6efd", cursor: "pointer" }}
+                                    style={{ color: "white", cursor: "pointer" }}
                                     onClick={() => Generate()}
                                 >
                                     Change Avatar

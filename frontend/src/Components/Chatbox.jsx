@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppStates } from "../AppContext/Provider";
-import { BsFillEyeFill } from 'react-icons/bs';
+import { BsFillEyeFill, BsFillSendFill } from 'react-icons/bs';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import { getSender } from '../ChatLogic';
 import UserComponent from "./usercomponent";
 import { toast } from "react-toastify";
 import axios from "axios";
+import Scrollable from 'react-scrollable-feed';
 
 export default function ChatBox() {
     const [GroupName, SetGroupName] = useState('');
     const [UserName, SetUserName] = useState('');
     const [searchresult, setsearchresult] = useState([]);
     const { user, selectedchats, setselectedchats } = useAppStates();
+
+    const [content, setcontent] = useState('');
+    const [AllMessages, SetAllMessages] = useState([]);
 
     const handleUserSearch = async (e) => {
         e.preventDefault();
@@ -48,7 +52,7 @@ export default function ChatBox() {
                     },
                     config
                 );
-                toast.success('User Added Successfully.');
+                toast('User Added Successfully.');
                 setselectedchats(data);
             } catch (error) {
                 toast.error('Failed to Add new user to group');
@@ -74,8 +78,9 @@ export default function ChatBox() {
                     },
                     config
                 );
-                toast.success("User Removed Successfully.");
+                toast("User Removed Successfully.");
                 setselectedchats(data);
+                FetchAllMessages();
             } catch (error) {
                 toast.error('Failed to Remove user from group');
             }
@@ -86,8 +91,13 @@ export default function ChatBox() {
     }
 
     const handleNameChange = async () => {
+        if (GroupName === '') {
+            toast.error('Enter a valid Group Name')
+            return
+        }
         if (selectedchats.groupAdmin._id !== user.user._id) {
             toast.error('Only Admin can Update Group Chat.')
+            return
         }
         else {
             try {
@@ -103,7 +113,7 @@ export default function ChatBox() {
                     },
                     config
                 );
-                toast.success('Group Chat Renamed Successfully.');
+                toast('Group Chat Renamed Successfully.');
                 SetGroupName('')
                 setselectedchats(data);
             } catch (err) {
@@ -111,7 +121,6 @@ export default function ChatBox() {
             }
         }
     }
-
 
     const HandleExit = async (UserID) => {
         try {
@@ -127,13 +136,62 @@ export default function ChatBox() {
                 },
                 config
             );
-            toast.success(data.message);
+            toast(data.message);
             setselectedchats([]);
         } catch (error) {
             toast.error('Failed to Remove user from group');
         }
     }
 
+
+    const FetchAllMessages = async () => {
+        if (!selectedchats) return;
+
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            };
+
+            const { data } = await axios.get(
+                `http://localhost:5000/api/message/${selectedchats._id}`,
+                config
+            );
+            SetAllMessages(data);
+        } catch (error) {
+            toast.error('Fetching all Messages Failed !');
+        }
+    }
+
+    const HandleSendMessage = async (e) => {
+        e.preventDefault();
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${user.token}`,
+                },
+            };
+            setcontent('');
+            const { data } = await axios.post(
+                "/api/message",
+                {
+                    content: content,
+                    chatID: selectedchats._id,
+                },
+                config
+            );
+            SetAllMessages([...AllMessages, data])
+        } catch (error) {
+            toast.error('Failed to Deliver Message !');
+        }
+    }
+
+    useEffect(() => {
+        FetchAllMessages();
+
+    }, [selectedchats]);
 
     return (
         <>
@@ -145,7 +203,7 @@ export default function ChatBox() {
                             <div className="modal-header">
                                 <button
                                     type="button"
-                                    className="btn-close btn-close-white"
+                                    className="btn-close"
                                     data-bs-dismiss="modal"
                                     onClick={() => { setsearchresult([]); SetUserName('') }}
                                 ></button>
@@ -183,7 +241,7 @@ export default function ChatBox() {
                                                         {user.name}
                                                         <button
                                                             type="button"
-                                                            className="btn btn-close ms-2"
+                                                            className="btn btn-close btn-close-white ms-2"
                                                             style={{ width: "5px", height: "6px" }}
                                                             onClick={() => HandleRemove(user)}
                                                         ></button>
@@ -192,10 +250,10 @@ export default function ChatBox() {
                                             })}
                                             <input
                                                 type="text"
-                                                className="form-control mt-2 mb-1"
-                                                id="CreateGrpInp"
+                                                className="form-control mt-2 mb-1 styled"
                                                 placeholder="Group Name"
                                                 value={GroupName}
+                                                required
                                                 name="GroupName"
                                                 onChange={(e) => SetGroupName(e.target.value)}
                                             />
@@ -203,8 +261,7 @@ export default function ChatBox() {
                                             <form onSubmit={handleUserSearch}>
                                                 <input
                                                     type="text"
-                                                    className="form-control"
-                                                    id="CreateGrpInp"
+                                                    className="form-control styled"
                                                     name="UserName"
                                                     placeholder="Search Users"
                                                     value={UserName}
@@ -233,22 +290,17 @@ export default function ChatBox() {
                             <div className="modal-footer">
                                 {!selectedchats.isGroupChat
                                     ?
-                                    <button className="btn btn-light text-dark" data-bs-dismiss="modal">close</button>
+                                    <button className="btn StyledButton" data-bs-dismiss="modal">close</button>
                                     :
                                     <>
                                         <button
-                                            className="btn btn-light text-dark"
-                                            data-bs-dismiss="modal"
-                                            onClick={() => { setsearchresult([]); SetUserName('') }}
-                                        >close</button>
-                                        <button
                                             className="btn btn-danger"
                                             onClick={() => HandleExit(user.user._id)}
-                                        >Exit Group</button>
+                                        >Exit</button>
                                         <button
                                             className="btn btn-success"
                                             onClick={handleNameChange}
-                                        >Update Group</button>
+                                        >Rename</button>
                                     </>
                                 }
                             </div>
@@ -268,9 +320,9 @@ export default function ChatBox() {
             >
                 {selectedchats
                     ?
-                    <div className="row">
+                    <div className="row h-100 position-relative">
                         <div
-                            className="col-12 d-flex justify-content-evenly align-items-center"
+                            className="col-12 d-flex justify-content-evenly align-items-center ChatBoxOpeningWrapper"
                             style={{ height: "60px" }}
                         >
                             <button
@@ -294,10 +346,46 @@ export default function ChatBox() {
                                 <BsFillEyeFill />
                             </button>
                         </div>
-                        <div className="MessageBox">
 
+
+                        <div className="MessageBox d-flex flex-column justify-content-end h-100">
+                            {
+                                AllMessages && AllMessages.map((message, i) => {
+                                    return (
+                                        <span
+                                            key={message._id}
+                                            style={{
+                                                backgroundColor: `${message.sender._id === user.user._id ? "#922EF4" : "#DBE2E9"}`,
+                                                alignSelf: `${message.sender._id === user.user._id ? "end" : "start"}`,
+                                                borderRadius: "2px",
+                                                marginTop: "2px",
+                                                padding: "5px 15px",
+                                                maxWidth: "100%",
+                                                color: `${message.sender._id === user.user._id ? "#fff" : "#000"}`,
+                                                fontWeight: "bold"
+                                            }}
+                                        >
+                                            {message.content}
+                                        </span>
+                                    )
+                                })
+                            }
                         </div>
 
+                        <form class="d-flex FormBox py-2" onSubmit={HandleSendMessage}>
+                            <input
+                                type="text"
+                                class="form-control me-2"
+                                id="MessageInput"
+                                placeholder="Send Message"
+                                value={content}
+                                required
+                                onChange={(e) => setcontent(e.target.value)}
+                            />
+                            <button type="submit" class="btn d-inline-flex StyledButton">
+                                <BsFillSendFill size={22} color="white" />
+                            </button>
+                        </form>
                     </div>
                     :
                     <div className="row d-flex align-items-center w-100">
