@@ -203,7 +203,9 @@ export default function MyChats() {
             >
                 <div className="row">
 
-                    <div className="d-flex justify-content-between mt-1">
+                    <div
+                        className="d-flex justify-content-between mt-1"
+                    >
                         <h3 className="m-2 d-inline">My Chats</h3>
                         <button
                             data-bs-toggle='modal'

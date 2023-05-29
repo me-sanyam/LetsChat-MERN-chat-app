@@ -8,13 +8,12 @@ export default function Home() {
     return (
         <>
             <Navbar />
-            <div className="container-fluid">
-                <div className="row px-3 py-4 d-flex justify-content-evenly">
+            <div className="container-fluid px-3 py-4 " style={{ height: "100%" }}>
+                <div className="row d-flex justify-content-evenly">
                     <MyChats />
                     <ChatBox />
                 </div>
-            </div>
+            </div >
         </>
-
     );
 }

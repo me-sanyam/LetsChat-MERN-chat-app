@@ -1,12 +1,25 @@
 :root {
-  --Gradient_Second: #922EF4;
+  /* --Gradient_Second: #922EF4; */
+  /* --Gradient_Second: #6439AD; */
+  --Gradient_Second: #39B5E0;
+  --Gradient_First: #31E1F7;
+  --Gradient_Third: #146C94;
   --White: #ffffff;
   --Black: #000000;
   --Chrome: #DBE2E9;
 }
 
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  color: transparent;
+  border-radius: 20px;
 }
 
 textarea:focus,
@@ -23,7 +36,6 @@ input[type=number]:focus,
 [contenteditable].form-control:focus {
   box-shadow: none;
   outline: none;
-  /* border: 1px solid white; */
 }
 
 body {
@@ -33,9 +45,9 @@ body {
 }
 
 /* Login and Register page */
-
 #Wrapper {
-  background: conic-gradient(from 315deg, #6439AD, #B91BF7);
+  /* background: conic-gradient(from 315deg, #6439AD, #B91BF7); */
+  background: conic-gradient(from 315deg, var(--Gradient_Third), var(--Gradient_First), var(--Gradient_Second));
   width: 100%;
   height: 100vh;
 }
@@ -139,17 +151,14 @@ body {
 }
 
 /* mychats page */
-#OverFlowY {
-  overflow-y: scroll;
-  height: 100vh;
-  scrollbar-width: none;
-}
 
 .MyChats {
   background-color: var(--White);
   border-radius: 5px;
+  border: 3px solid var(--White);
   height: 85.3vh;
-  overflow-y: hidden;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .ChatUser {
@@ -170,6 +179,15 @@ body {
   color: var(--White);
 }
 
+
+.ChatBox {
+  background-color: var(--White);
+  border-radius: 5px;
+  height: 85.3vh;
+  position: relative;
+  overflow-y: hidden;
+}
+
 .ChatBoxOpeningWrapper {
   background-color: var(--Gradient_Second);
   color: var(--White);
@@ -177,16 +195,18 @@ body {
 
 .MessageBox {
   background-color: var(--White);
-  overflow-y: scroll;
-  padding-bottom: 125px;
-  padding-top: 10px;
+  position: absolute;
+  top: 60px;
+  height: 70vh;
+  /* overflow-y: scroll; */
 }
 
 .FormBox {
+  height: 55px;
   position: absolute;
   bottom: 0;
-  height: 55px;
   background-color: var(--White);
+  border-top: 1px solid var(--Chrome);
 }
 
 #MessageInput {

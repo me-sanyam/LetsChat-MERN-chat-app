@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppStates } from "../AppContext/Provider";
 import { BsFillEyeFill, BsFillSendFill } from 'react-icons/bs';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
-import { getSender } from '../ChatLogic';
+import { getSender, isSameSenderMargin, isSameUser, isLastMessage, isSameSender } from '../ChatLogic';
 import UserComponent from "./usercomponent";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -52,7 +52,7 @@ export default function ChatBox() {
                     },
                     config
                 );
-                toast('User Added Successfully.');
+                toast.info('User Added Successfully.');
                 setselectedchats(data);
             } catch (error) {
                 toast.error('Failed to Add new user to group');
@@ -78,7 +78,7 @@ export default function ChatBox() {
                     },
                     config
                 );
-                toast("User Removed Successfully.");
+                toast.info("User Removed Successfully.");
                 setselectedchats(data);
                 FetchAllMessages();
             } catch (error) {
@@ -113,7 +113,7 @@ export default function ChatBox() {
                     },
                     config
                 );
-                toast('Group Chat Renamed Successfully.');
+                toast.info('Group Chat Renamed Successfully.');
                 SetGroupName('')
                 setselectedchats(data);
             } catch (err) {
@@ -136,8 +136,8 @@ export default function ChatBox() {
                 },
                 config
             );
-            toast(data.message);
-            setselectedchats([]);
+            toast.info(data.message);
+            setselectedchats();
         } catch (error) {
             toast.error('Failed to Remove user from group');
         }
@@ -313,14 +313,14 @@ export default function ChatBox() {
                 className={
                     (!selectedchats)
                         ?
-                        "d-none d-md-flex col-md-7 col-xl-8 MyChats"
+                        "d-none d-md-flex col-md-7 col-xl-8 ChatBox"
                         :
-                        "col-md-7 col-xl-8 MyChats"
+                        "col-md-7 col-xl-8 ChatBox"
                 }
             >
                 {selectedchats
                     ?
-                    <div className="row h-100 position-relative">
+                    <div className="row h-100">
                         <div
                             className="col-12 d-flex justify-content-evenly align-items-center ChatBoxOpeningWrapper"
                             style={{ height: "60px" }}
@@ -348,28 +348,50 @@ export default function ChatBox() {
                         </div>
 
 
-                        <div className="MessageBox d-flex flex-column justify-content-end h-100">
-                            {
-                                AllMessages && AllMessages.map((message, i) => {
-                                    return (
-                                        <span
-                                            key={message._id}
-                                            style={{
-                                                backgroundColor: `${message.sender._id === user.user._id ? "#922EF4" : "#DBE2E9"}`,
-                                                alignSelf: `${message.sender._id === user.user._id ? "end" : "start"}`,
-                                                borderRadius: "2px",
-                                                marginTop: "2px",
-                                                padding: "5px 15px",
-                                                maxWidth: "100%",
-                                                color: `${message.sender._id === user.user._id ? "#fff" : "#000"}`,
-                                                fontWeight: "bold"
-                                            }}
-                                        >
-                                            {message.content}
-                                        </span>
-                                    )
-                                })
-                            }
+
+                        <div className="MessageBox">
+
+                            <Scrollable className="pb-1">
+                                {
+                                    AllMessages && AllMessages.map((message, i) => {
+                                        return (
+                                            <div
+                                                key={message._id}
+                                                style={{
+                                                    display: "flex",
+                                                    marginTop: `${isSameUser(AllMessages, message, i, user.user._id) ? "1px" : "15px"}`
+                                                }}
+                                            >
+                                                {(isSameSender(AllMessages, message, i, user.user._id) ||
+                                                    isLastMessage(AllMessages, i, user.user._id)) && (
+                                                        <img
+                                                            key={message.sender.avatar}
+                                                            alt="user_avatar"
+                                                            width={"35px"}
+                                                            name={message.sender.name}
+                                                            src={message.sender.avatar}
+                                                        />
+                                                    )}
+                                                <span
+                                                    key={message.content}
+                                                    style={{
+                                                        alignSelf: `${message.sender._id !== user.user._id ? "start" : "end"}`,
+                                                        backgroundColor: `${message.sender._id === user.user._id ? "#39B5E0" : "#DBE2E9"}`,
+                                                        borderRadius: "5px",
+                                                        marginLeft: isSameSenderMargin(AllMessages, message, i, user.user._id),
+                                                        padding: "5px 15px",
+                                                        color: `${message.sender._id === user.user._id ? "#fff" : "#000"}`,
+                                                        fontWeight: "bold"
+                                                    }}
+                                                >
+                                                    {message.content}
+                                                </span>
+
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </Scrollable>
                         </div>
 
                         <form class="d-flex FormBox py-2" onSubmit={HandleSendMessage}>

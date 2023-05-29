@@ -17,7 +17,7 @@ export default function Navbar() {
         localStorage.removeItem('UserInfo');
         navigate("/");
         setselectedchats();
-        toast('Logged out successfully.')
+        toast.info('Logged out successfully.')
     }
 
     const handlesearch = async (e) => {

@@ -39,7 +39,7 @@ export default function RegisterUser() {
                 }
             }
             const { data } = await axios.post('http://localhost:5000/api/login', { email, password }, config);
-            toast('User Login successfull.');
+            toast.info('User Login successfull.');
             navigate('/Lets-Chat');
             localStorage.setItem('UserInfo', JSON.stringify(data));
         } catch (error) {
@@ -57,7 +57,7 @@ export default function RegisterUser() {
                 }
             }
             const { data } = await axios.post('http://localhost:5000/api/signup', { name, email, password, avatar }, config);
-            toast('User signup successfull.');
+            toast.info('User signup successfull.');
             navigate('/Lets-Chat');
             localStorage.setItem('UserInfo', JSON.stringify(data));
         } catch (error) {
