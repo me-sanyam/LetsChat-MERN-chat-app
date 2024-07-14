@@ -16,6 +16,7 @@ export default function ChatBox() {
 
     const [content, setcontent] = useState('');
     const [AllMessages, SetAllMessages] = useState([]);
+    console.log(AllMessages);
 
     const handleUserSearch = async (e) => {
         e.preventDefault();
@@ -350,7 +351,6 @@ export default function ChatBox() {
 
 
                         <div className="MessageBox">
-
                             <Scrollable className="pb-1">
                                 {
                                     AllMessages && AllMessages.map((message, i) => {
@@ -359,11 +359,12 @@ export default function ChatBox() {
                                                 key={message._id}
                                                 style={{
                                                     display: "flex",
-                                                    marginTop: `${isSameUser(AllMessages, message, i, user.user._id) ? "1px" : "15px"}`
+                                                    marginTop: `${isSameUser(AllMessages, message, i) ? "1px" : "15px"}`
                                                 }}
                                             >
-                                                {(isSameSender(AllMessages, message, i, user.user._id) ||
-                                                    isLastMessage(AllMessages, i, user.user._id)) && (
+                                                {
+                                                    (isSameSender(AllMessages, message, i, user.user._id) ||
+                                                        isLastMessage(AllMessages, i, user.user._id)) && (
                                                         <img
                                                             key={message.sender.avatar}
                                                             alt="user_avatar"

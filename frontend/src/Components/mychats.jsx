@@ -31,11 +31,12 @@ export default function MyChats() {
             toast.error(error);
         }
     }
-    fetchChats();
 
     useEffect(() => {
         SetLoggedUser(JSON.parse(localStorage.getItem('UserInfo')));
     }, [])
+
+    fetchChats();
 
     const handleUserSearch = async (e) => {
         e.preventDefault();
