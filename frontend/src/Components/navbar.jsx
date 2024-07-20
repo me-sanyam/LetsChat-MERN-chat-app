@@ -22,21 +22,33 @@ export default function Navbar() {
 
     const handlesearch = async (e) => {
         e.preventDefault();
-        if (!search) {
-            return
-        } else {
-            try {
-                const config = {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`
-                    }
+        // if (!search) {
+        //     return
+        // } else {
+        //     try {
+        //         const config = {
+        //             headers: {
+        //                 Authorization: `Bearer ${user.token}`
+        //             }
+        //         }
+        //         const { data } = await axios.get(`http://localhost:5000/api?search=${search}`, config);
+        //         setsearchresult(data.users)
+        //     } catch (err) {
+        //         toast.error(err);
+        //         return
+        //     }
+        // }
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`
                 }
-                const { data } = await axios.get(`http://localhost:5000/api?search=${search}`, config);
-                setsearchresult(data.users)
-            } catch (err) {
-                toast.error(err);
-                return
             }
+            const { data } = await axios.get(`http://localhost:5000/api?search=${search}`, config);
+            setsearchresult(data.users)
+        } catch (err) {
+            toast.error(err);
+            return
         }
     }
 
@@ -62,7 +74,7 @@ export default function Navbar() {
         <>
             <nav className="navbar text-light">
                 <div className="container-fluid">
-                    <div style={{ cursor: "pointer" }} data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+                    <div style={{ cursor: "pointer" }} data-bs-toggle="offcanvas" data-bs-target="#sidebar" onClick={handlesearch}>
                         <p className='d-inline-flex mx-2 mb-0 mt-1' style={{ fontSize: "1rem" }}>Search</p>
                         <BsSearch size={15} className='mb-1' />
                     </div>
@@ -121,7 +133,7 @@ export default function Navbar() {
                     <div className="col-12 mt-3">
                         <div className="row px-3">
                             {
-                                searchresult && searchresult.map(user => {
+                                searchresult.length ? searchresult.map(user => {
                                     return (
                                         <UserComponent
                                             avatar={user.avatar}
@@ -132,6 +144,8 @@ export default function Navbar() {
                                         />
                                     );
                                 })
+                                :
+                                <p className='mt-5 text-center'>No Users Found.</p>
                             }
                         </div>
                     </div>

@@ -137,7 +137,7 @@ body {
   background-color: var(--Chrome);
 }
 
-.UserComponent {
+#UserComponent {
   background-color: var(--Chrome);
   border-radius: 5px;
   color: var(--Black);
@@ -145,7 +145,14 @@ body {
   transition: 0.2s;
 }
 
-.UserComponent:hover {
+#UserComponentMember{
+  background-color: var(--Gradient_Third);
+  border-radius: 5px;
+  color: var(--White);
+  cursor: pointer;
+}
+
+#UserComponent:hover {
   background-color: var(--Gradient_Second);
   color: var(--White);
 }

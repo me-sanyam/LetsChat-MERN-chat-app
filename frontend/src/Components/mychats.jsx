@@ -32,18 +32,15 @@ export default function MyChats() {
         }
     }
 
-    useEffect(() => {
-        SetLoggedUser(JSON.parse(localStorage.getItem('UserInfo')));
-    }, [])
 
-    fetchChats();
+    useEffect(() => {
+        SetLoggedUser(user);
+        fetchChats();
+    }, [user])
+
 
     const handleUserSearch = async (e) => {
         e.preventDefault();
-        if (!search) {
-            toast.error('Please enter username or email to search.');
-            return
-        }
         try {
             const config = {
                 headers: {
@@ -59,9 +56,11 @@ export default function MyChats() {
     }
 
     const handleAddition = (usertoAdd) => {
-
-        if (groupmembers.includes(usertoAdd)) {
-            toast.info('User already added !')
+        const isGroupMember = groupmembers.filter(item => item._id == usertoAdd._id);
+        
+        if (isGroupMember.length) {
+            const updatedMembers = groupmembers.filter(item => item._id !== usertoAdd._id);
+            setgroupmembers(updatedMembers);
             return
         }
         setgroupmembers([...groupmembers, usertoAdd]);
@@ -163,7 +162,7 @@ export default function MyChats() {
                                     <p className="mb-0 ms-2">Please select at least 2 users to create a Group Chat.</p>
                                 }
                             </div>
-                            <div className="">
+                            <div style={{maxHeight: '145px',overflowY: "auto",height: "145px"}}>
                                 {
                                     searchresult && searchresult.map(user => {
                                         return (
@@ -213,53 +212,60 @@ export default function MyChats() {
                             data-bs-target='#CreateGroupModal'
                             className="btn mt-2 StyledButton"
                             style={{ width: "150px", height: "35px" }}
+                            onClick={handleUserSearch}
                         >
                             Create Group +
                         </button>
                     </div>
                     <div className="col-12 px-2 py-1" id="OverFlowY">
-                        {chats && (!loading) ?
-                            chats.map(chat => {
-                                return (
-                                    <div
-                                        key={chat._id}
-                                        className="col-12 d-flex align-items-center ChatUser p-3 mt-2"
-                                        onClick={() => setselectedchats(chat)}
-                                    >
-                                        {
-                                            (chat.isGroupChat)
-                                                ?
-                                                <img
-                                                    src={`https://api.dicebear.com/6.x/thumbs/svg?seed=${chat.ChatName}`}
-                                                    alt="Group_image"
-                                                    width="50px"
-                                                    height="auto"
-                                                    className="mb-1"
-                                                    style={{ borderRadius: "50%" }} />
-                                                :
-                                                <img
-                                                    src={getSender(loggedUser, chat.users).avatar}
-                                                    alt="profile"
-                                                    width="50px"
-                                                    height="auto"
-                                                    className="mb-1"
-                                                />
-                                        }
-                                        <div className="ms-3">
+                    {!loading && 
+                        <>
+                            {chats && chats.length > 0 
+                            ?
+                                chats.map(chat => {
+                                    return (
+                                        <div
+                                            key={chat._id}
+                                            className="col-12 d-flex align-items-center ChatUser p-3 mt-2"
+                                            onClick={() => setselectedchats(chat)}
+                                        >
                                             {
                                                 (chat.isGroupChat)
                                                     ?
-                                                    <p className="mb-0"><strong>{chat.ChatName}</strong></p>
+                                                    <img
+                                                        src={`https://api.dicebear.com/6.x/thumbs/svg?seed=${chat.ChatName}`}
+                                                        alt="Group_image"
+                                                        width="50px"
+                                                        height="auto"
+                                                        className="mb-1"
+                                                        style={{ borderRadius: "50%" }} />
                                                     :
-                                                    <p className="mb-0"><strong>{getSender(loggedUser, chat.users).name}</strong></p>
+                                                    <img
+                                                        src={getSender(loggedUser, chat.users).avatar}
+                                                        alt="profile"
+                                                        width="50px"
+                                                        height="auto"
+                                                        className="mb-1"
+                                                    />
                                             }
+                                            <div className="ms-3">
+                                                {
+                                                    (chat.isGroupChat)
+                                                        ?
+                                                        <p className="mb-0"><strong>{chat.ChatName}</strong></p>
+                                                        :
+                                                        <p className="mb-0"><strong>{getSender(loggedUser, chat.users).name}</strong></p>
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })
+                                    );
+                                })
                             :
-                            <p className="mt-2 text-center">loading</p>
-                        }
+                            <p className="mt-5 text-center">You haven't chatted with anyone.</p>
+                            }
+                        </>
+                    }
+                    {loading && <p className="mt-2 text-center">loading</p>}
                     </div>
                 </div>
             </div>

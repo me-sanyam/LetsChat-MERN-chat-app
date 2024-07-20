@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-export default function usercomponent(props) {
+export default function Usercomponent(props) {
+
     return (
         <div
             onClick={props.handleFunction}
-            className="col-12 UserComponent py-2 px-3 mt-1 d-flex align-items-center jutify-content-center"
+            id={"UserComponent"}
+            className="col-12 py-2 px-3 mt-1 d-flex align-items-center jutify-content-center"
         >
             <img className='mb-2' src={props.avatar} alt="profile.." width="50px" height="auto" />
             <div className="ps-3">

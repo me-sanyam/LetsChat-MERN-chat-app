@@ -16,14 +16,9 @@ export default function ChatBox() {
 
     const [content, setcontent] = useState('');
     const [AllMessages, SetAllMessages] = useState([]);
-    console.log(AllMessages);
 
     const handleUserSearch = async (e) => {
         e.preventDefault();
-        if (!UserName) {
-            toast.error('Please enter username or email to search.');
-            return
-        }
         try {
             const config = {
                 headers: {
@@ -39,6 +34,14 @@ export default function ChatBox() {
     }
 
     const handleAddition = async (newuser) => {
+
+        const members = selectedchats.users;
+
+        const isMember = members.filter(item => item._id == newuser._id);
+        
+        if(isMember.length){
+            return;  
+        }
         if (selectedchats.groupAdmin._id === user.user._id) {
             try {
                 const config = {
@@ -191,9 +194,15 @@ export default function ChatBox() {
 
     useEffect(() => {
         FetchAllMessages();
-
+        console.log({selectedchats});
     }, [selectedchats]);
 
+    const handleChange = (e) => {
+        console.log(selectedchats.isGroupChat);
+        if(selectedchats.isGroupChat){
+            handleUserSearch(e);
+        }
+    }
     return (
         <>
             <div className="modal" id="UserProfileModal">
@@ -233,75 +242,86 @@ export default function ChatBox() {
                                         :
                                         <>
                                             <p className="mt-2 mb-0">All Members</p>
-                                            {selectedchats.users.map((user) => {
+                                            {selectedchats.users.map((item) => {
                                                 return (
                                                     <span
-                                                        key={user._id}
+                                                        key={item._id}
                                                         className="badge p-2 m-1"
                                                     >
-                                                        {user.name}
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-close btn-close-white ms-2"
-                                                            style={{ width: "5px", height: "6px" }}
-                                                            onClick={() => HandleRemove(user)}
-                                                        ></button>
+                                                        {item.name}
+                                                        {
+                                                            selectedchats.groupAdmin._id == user.user._id &&
+                                                            item._id !== selectedchats.groupAdmin._id &&
+                                                            <button
+                                                                type="button"
+                                                                className="btn btn-close btn-close-white ms-2"
+                                                                style={{ width: "5px", height: "6px" }}
+                                                                onClick={() => HandleRemove(item)}
+                                                            ></button>
+                                                        }
                                                     </span>
                                                 )
                                             })}
-                                            <input
-                                                type="text"
-                                                className="form-control mt-2 mb-1 styled"
-                                                placeholder="Group Name"
-                                                value={GroupName}
-                                                required
-                                                name="GroupName"
-                                                onChange={(e) => SetGroupName(e.target.value)}
-                                            />
-
-                                            <form onSubmit={handleUserSearch}>
+                                            {selectedchats.groupAdmin._id == user.user._id &&
+                                            <>
                                                 <input
                                                     type="text"
-                                                    className="form-control styled"
-                                                    name="UserName"
-                                                    placeholder="Search Users"
-                                                    value={UserName}
-                                                    onChange={(e) => SetUserName(e.target.value)}
+                                                    className="form-control mt-2 mb-1 styled"
+                                                    placeholder="Group Name"
+                                                    value={GroupName}
+                                                    required
+                                                    name="GroupName"
+                                                    onChange={(e) => SetGroupName(e.target.value)}
                                                 />
-                                            </form>
-                                            <div className="mt-2">
-                                                {
-                                                    searchresult && searchresult.map(user => {
-                                                        return (
-                                                            <UserComponent
-                                                                avatar={user.avatar}
-                                                                key={user._id}
-                                                                username={user.name}
-                                                                email={user.email}
-                                                                handleFunction={() => handleAddition(user)}
-                                                            />
-                                                        );
-                                                    })
-                                                }
-                                            </div>
+
+                                                <form onSubmit={handleUserSearch}>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control styled"
+                                                        name="UserName"
+                                                        placeholder="Search Users"
+                                                        value={UserName}
+                                                        onChange={(e) => SetUserName(e.target.value)}
+                                                    />
+                                                </form>
+                                                <div className="mt-2" style={{maxHeight: '145px',overflowY: "auto",height: "145px"}}>
+                                                    {
+                                                        searchresult && searchresult.map(user => {
+                                                            return (
+                                                                <UserComponent
+                                                                    avatar={user.avatar}
+                                                                    key={user._id}
+                                                                    username={user.name}
+                                                                    email={user.email}
+                                                                    handleFunction={() => handleAddition(user)}
+                                                                />
+                                                            );
+                                                        })
+                                                    }
+                                                </div>
+                                            </>
+                                            }
                                         </>
                                 }
                             </div>
-
                             <div className="modal-footer">
                                 {!selectedchats.isGroupChat
                                     ?
                                     <button className="btn StyledButton" data-bs-dismiss="modal">close</button>
                                     :
                                     <>
-                                        <button
-                                            className="btn btn-danger"
-                                            onClick={() => HandleExit(user.user._id)}
-                                        >Exit</button>
-                                        <button
-                                            className="btn btn-success"
-                                            onClick={handleNameChange}
-                                        >Rename</button>
+                                        {selectedchats.groupAdmin._id !== user.user._id &&
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={() => HandleExit(user.user._id)}
+                                            >Exit</button>
+                                        }
+                                        {selectedchats.groupAdmin._id == user.user._id &&
+                                            <button
+                                                className="btn btn-success"
+                                                onClick={handleNameChange}
+                                            >Rename</button>
+                                        }
                                     </>
                                 }
                             </div>
@@ -343,6 +363,7 @@ export default function ChatBox() {
                                 className="btn btn-sm btn-light"
                                 data-bs-toggle="modal"
                                 data-bs-target="#UserProfileModal"
+                                onClick={(e) => handleChange(e)}
                             >
                                 <BsFillEyeFill />
                             </button>
