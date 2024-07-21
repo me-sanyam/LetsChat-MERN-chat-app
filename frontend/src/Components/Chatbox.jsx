@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppStates } from "../AppContext/Provider";
 import { BsFillEyeFill, BsFillSendFill } from 'react-icons/bs';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
-import { getSender, isSameSenderMargin, isSameUser, isLastMessage, isSameSender } from '../ChatLogic';
+import { getSender, isSameUser } from '../ChatLogic';
 import UserComponent from "./usercomponent";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -383,24 +383,12 @@ export default function ChatBox() {
                                                     marginTop: `${isSameUser(AllMessages, message, i) ? "1px" : "15px"}`
                                                 }}
                                             >
-                                                {
-                                                    (isSameSender(AllMessages, message, i, user.user._id) ||
-                                                        isLastMessage(AllMessages, i, user.user._id)) && (
-                                                        <img
-                                                            key={message.sender.avatar}
-                                                            alt="user_avatar"
-                                                            width={"35px"}
-                                                            name={message.sender.name}
-                                                            src={message.sender.avatar}
-                                                        />
-                                                    )}
                                                 <span
                                                     key={message.content}
                                                     style={{
-                                                        alignSelf: `${message.sender._id !== user.user._id ? "start" : "end"}`,
                                                         backgroundColor: `${message.sender._id === user.user._id ? "#39B5E0" : "#DBE2E9"}`,
                                                         borderRadius: "5px",
-                                                        marginLeft: isSameSenderMargin(AllMessages, message, i, user.user._id),
+                                                        marginLeft:`${message.sender._id !== user.user._id ? 0 : "auto"}`,
                                                         padding: "5px 15px",
                                                         color: `${message.sender._id === user.user._id ? "#fff" : "#000"}`,
                                                         fontWeight: "bold"
