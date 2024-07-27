@@ -5,7 +5,7 @@ const Appcontext = createContext();
 
 export default function ContextProvider({ children }) {
     const [user, setuser] = useState();
-    const [chats, setchats] = useState();
+    const [chats, setchats] = useState([]);
     const [selectedchats, setselectedchats] = useState();
 
     const navigate = useNavigate();

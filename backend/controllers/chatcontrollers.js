@@ -1,6 +1,7 @@
 const asynchandler = require('express-async-handler');
 const CHAT = require('../models/chatmodel');
 const USER = require('../models/usermodel');
+const MESSAGE = require('../models/messagemodel');
 
 exports.accesschat = asynchandler(async (req, res) => {
     const { user_id } = req.body;
@@ -47,11 +48,30 @@ exports.fetchchats = asynchandler(async (req, res) => {
             .populate('groupAdmin', '-password')
             .populate('latestmessage')
             .sort({ updatedAt: -1 })
+            .lean();
 
         results = await USER.populate(results, {
             path: "latestmessage.sender",
             select: "name avatar email"
         })
+
+        if(results.length){
+
+            for (let index = 0; index < results.length; index++) {
+                const chat = results[index];
+
+                const unreadMessages = await MESSAGE.find({$and : 
+                    [
+                        {chat: chat._id},
+                        {sender: {$ne: req.user._id}},
+                        {readBy: { $nin: [req.user._id] } }
+                    ]
+                })
+
+                chat.unreadCount = unreadMessages.length;
+                results[index] = chat
+            }
+        }
         res.status(200).send(results);
 
     } catch (err) {

@@ -19,9 +19,15 @@ const server  = app.listen(process.env.PORT, () => {
     console.log('Server Running on port:', process.env.PORT);
 })
 
-const io = socketIo(server);
+const io = socketIo(server,{
+    pingTimeout: 60000,
+    cors:{
+        origin:"http://localhost:3000"
+    }
+});
 
 io.on('connection', (socket) => {
+    console.log('Socket Connection Successful');
 
     require('./chatLib.js')(socket);
 

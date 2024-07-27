@@ -208,7 +208,7 @@ body {
 }
 
 .FormBox {
-  height: 55px;
+  height: 50px;
   position: absolute;
   bottom: 0;
   background-color: var(--White);

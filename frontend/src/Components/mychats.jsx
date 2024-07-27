@@ -5,7 +5,7 @@ import axios from 'axios';
 import { getSender } from '../ChatLogic';
 import UserComponent from "./usercomponent";
 
-export default function MyChats() {
+export default function MyChats({socket}) {
     const [loading, setloading] = useState(true);
     const [loggedUser, SetLoggedUser] = useState();
     const [search, setsearch] = useState('');
@@ -14,6 +14,19 @@ export default function MyChats() {
     const [groupname, setgroupname] = useState('');
 
     const { user, chats, setchats, selectedchats, setselectedchats } = useAppStates();
+
+
+    useEffect(() => {
+        if(socket && chats.length){
+            socket.on(`update-chat-count`,({chatId,count}) => {
+                chats.forEach(chat => {
+                    if(chat._id == chatId){
+                        chat.unreadCount = count;
+                    }
+                });
+            })      
+        }
+    },[socket])
 
     const fetchChats = async () => {
         try {
@@ -35,7 +48,9 @@ export default function MyChats() {
 
     useEffect(() => {
         SetLoggedUser(user);
-        fetchChats();
+        if(user){
+            fetchChats();
+        }
     }, [user])
 
 
@@ -226,7 +241,7 @@ export default function MyChats() {
                                     return (
                                         <div
                                             key={chat._id}
-                                            className="col-12 d-flex align-items-center ChatUser p-3 mt-2"
+                                            className="position-relative col-12 d-flex align-items-center ChatUser p-3 mt-2"
                                             onClick={() => setselectedchats(chat)}
                                         >
                                             {
@@ -257,6 +272,22 @@ export default function MyChats() {
                                                         <p className="mb-0"><strong>{getSender(loggedUser, chat.users).name}</strong></p>
                                                 }
                                             </div>
+                                            {chat.latestmessage ?
+                                                <>
+                                                    {chat.latestmessage.sender._id !== user.user._id && (chat.unreadCount > 0) ?
+                                                        <div
+                                                            class="position-absolute bg-dark rounded-circle d-flex justify-content-center align-items-center"
+                                                            style={{color: '#fff', right:"10px", width:"30px", height:"30px", padding: "12px", fontSize: '14px'}}
+                                                        >
+                                                            {chat.unreadCount}
+                                                        </div>
+                                                        :
+                                                        ("")
+                                                    }
+                                                </>
+                                                :
+                                                (" ")
+                                            }
                                         </div>
                                     );
                                 })

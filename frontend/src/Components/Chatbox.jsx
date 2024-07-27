@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Scrollable from 'react-scrollable-feed';
 
-export default function ChatBox() {
+export default function ChatBox({socket}) {
     const [GroupName, SetGroupName] = useState('');
     const [UserName, SetUserName] = useState('');
     const [searchresult, setsearchresult] = useState([]);
@@ -17,6 +17,24 @@ export default function ChatBox() {
     const [content, setcontent] = useState('');
     const [AllMessages, SetAllMessages] = useState([]);
 
+    useEffect(() => {
+        if(socket && selectedchats && user){
+            socket.on(`get-message-${selectedchats._id}`, ({message}) => {
+                const readBy = message.readBy;
+                message.readBy = [...readBy, user.user._id];
+                SetAllMessages([...AllMessages, message])
+            })
+
+            if(
+                selectedchats.latestmessage && 
+                selectedchats.latestmessage.sender._id !== user.user._id && 
+                selectedchats.unreadCount > 0
+            ){
+                socket.emit('read-message',{chatId: selectedchats._id, userId: user.user._id});
+            }
+        }
+    },[AllMessages])
+ 
     const handleUserSearch = async (e) => {
         e.preventDefault();
         try {
@@ -187,6 +205,7 @@ export default function ChatBox() {
                 config
             );
             SetAllMessages([...AllMessages, data])
+            socket.emit('user-message',{message: data, chatId: selectedchats._id});
         } catch (error) {
             toast.error('Failed to Deliver Message !');
         }
@@ -194,11 +213,9 @@ export default function ChatBox() {
 
     useEffect(() => {
         FetchAllMessages();
-        console.log({selectedchats});
     }, [selectedchats]);
 
     const handleChange = (e) => {
-        console.log(selectedchats.isGroupChat);
         if(selectedchats.isGroupChat){
             handleUserSearch(e);
         }
