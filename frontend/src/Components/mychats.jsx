@@ -19,6 +19,17 @@ export default function MyChats({socket}) {
     useEffect(() => {
         if(socket && chats.length){
             socket.on(`update-chat-count`,({chatId,count}) => {
+                setchats((prevState) => 
+                    prevState.map((item) => {
+                      if (item._id === chatId) {
+                        return {
+                          ...item,
+                          unreadCount: count,
+                        };
+                      }
+                      return item;
+                    })
+                );
                 chats.forEach(chat => {
                     if(chat._id == chatId){
                         chat.unreadCount = count;
