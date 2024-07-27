@@ -4,6 +4,7 @@ const ConnectDatabase = require('./database.js');
 const auth = require('./routes/auth.js');
 const chat = require('./routes/chat.js');
 const message = require('./routes/messages.js');
+const socketIo = require('socket.io');
 
 ConnectDatabase();
 const app = express();
@@ -14,9 +15,17 @@ app.use('/api', auth);
 app.use('/api/chats', chat);
 app.use('/api/message', message);
 
-app.listen(process.env.PORT, () => {
+const server  = app.listen(process.env.PORT, () => {
     console.log('Server Running on port:', process.env.PORT);
 })
 
+const io = socketIo(server);
 
+io.on('connection', (socket) => {
 
+    require('./chatLib.js')(socket);
+
+    socket.on('disconnect', () => {
+        console.log('--> Disconnected');
+    });
+});
