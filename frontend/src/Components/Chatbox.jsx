@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppStates } from "../AppContext/Provider";
 import { BsFillEyeFill, BsFillSendFill } from 'react-icons/bs';
 import { MdOutlineKeyboardBackspace } from 'react-icons/md';
@@ -15,25 +15,33 @@ export default function ChatBox({socket}) {
     const { user, selectedchats, setselectedchats } = useAppStates();
 
     const [content, setcontent] = useState('');
-    const [AllMessages, SetAllMessages] = useState([]);
+    const [AllMessages, setAllMessages] = useState([]);
+
+    const selectedChatsRef = useRef(null);
+
 
     useEffect(() => {
         if(socket && selectedchats && user){
-            socket.on(`get-message-${selectedchats._id}`, ({message}) => {
-                const readBy = message.readBy;
-                message.readBy = [...readBy, user.user._id];
-                SetAllMessages([...AllMessages, message])
+            selectedChatsRef.current = selectedchats;
+            socket.on(`get-message`, ({chatId,message}) => {
+                if(chatId == selectedChatsRef.current._id){
+                    const readBy = message.readBy;
+                    message.readBy = [...readBy, user.user._id];
+                    setAllMessages([...AllMessages, message]);
+                }
+                return;
             })
 
             if(
                 selectedchats.latestmessage && 
-                selectedchats.latestmessage.sender._id !== user.user._id && 
+                selectedchats.latestmessage.sender._id !== user.user._id &&
                 selectedchats.unreadCount > 0
             ){
-                socket.emit('read-message',{chatId: selectedchats._id, userId: user.user._id});
+                socket.emit('read-message',{chatId: selectedChatsRef.current._id, userId: user.user._id});
+                return;
             }
         }
-    },[AllMessages])
+    },[user,AllMessages,selectedchats])
  
     const handleUserSearch = async (e) => {
         e.preventDefault();
@@ -180,7 +188,7 @@ export default function ChatBox({socket}) {
                 `http://localhost:5000/api/message/${selectedchats._id}`,
                 config
             );
-            SetAllMessages(data);
+            setAllMessages(data);
         } catch (error) {
             toast.error('Fetching all Messages Failed !');
         }
@@ -204,7 +212,7 @@ export default function ChatBox({socket}) {
                 },
                 config
             );
-            SetAllMessages([...AllMessages, data])
+            setAllMessages([...AllMessages, data])
             socket.emit('user-message',{message: data, chatId: selectedchats._id});
         } catch (error) {
             toast.error('Failed to Deliver Message !');

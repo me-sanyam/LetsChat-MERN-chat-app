@@ -19,25 +19,27 @@ export default function MyChats({socket}) {
     useEffect(() => {
         if(socket && chats.length){
             socket.on(`update-chat-count`,({chatId,count}) => {
+                let newCount = 0;
+                if(!selectedchats){
+                    newCount = count;
+                }else if(selectedchats && selectedchats._id !== chatId){
+                    newCount = count
+                }
+
                 setchats((prevState) => 
                     prevState.map((item) => {
-                      if (item._id === chatId) {
+                      if (item._id == chatId) {
                         return {
                           ...item,
-                          unreadCount: count,
+                          unreadCount: newCount,
                         };
                       }
                       return item;
                     })
                 );
-                chats.forEach(chat => {
-                    if(chat._id == chatId){
-                        chat.unreadCount = count;
-                    }
-                });
             })      
         }
-    },[socket])
+    },[chats])
 
     const fetchChats = async () => {
         try {

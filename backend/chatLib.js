@@ -2,8 +2,19 @@ const MESSAGE = require('./models/messagemodel');
 
 module.exports = function(socket){
 
-    socket.on('user-message', ({message, chatId}) => { 
-        socket.broadcast.emit(`get-message-${chatId}`,{message:message});
+    socket.on('user-message', async({message,chatId}) => {
+        try{
+            const messages = await MESSAGE.find({
+                chat : chatId,
+                sender: {$eq: message.sender._id},
+                readBy: {$eq: []}
+            });
+
+            socket.broadcast.emit(`get-message`,{chatId:chatId,message:message});
+            socket.broadcast.emit(`update-chat-count`,{chatId: chatId, count:messages.length});
+        }catch(e){
+            console.log('-->>> ERROR',e);
+        }
     })
 
     socket.on('read-message', async({chatId,userId}) => {

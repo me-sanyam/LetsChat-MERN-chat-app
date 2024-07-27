@@ -23,8 +23,12 @@ export default function Home() {
             <Navbar />
             <div className="container-fluid px-3 py-4 " style={{ height: "100%" }}>
                 <div className="row d-flex justify-content-evenly">
+                  {socket &&
+                  <>
                     <MyChats socket={socket} />
                     <ChatBox socket={socket} />
+                  </>
+                  }
                 </div>
             </div >
         </>
