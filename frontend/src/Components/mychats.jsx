@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppStates } from "../AppContext/Provider";
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -15,6 +15,7 @@ export default function MyChats({socket}) {
 
     const { user, chats, setchats, selectedchats, setselectedchats } = useAppStates();
 
+    const selectedChatsRef = useRef([]);
 
     useEffect(() => {
         if(socket && chats.length){
@@ -22,13 +23,24 @@ export default function MyChats({socket}) {
                 let newCount = 0;
                 if(!selectedchats){
                     newCount = count;
-                }else if(selectedchats && selectedchats._id !== chatId){
-                    newCount = count
+                    console.log('####### NO SELECTED CHATS',chatId,newCount);
+                }else if(selectedchats){
+                    selectedChatsRef.current = selectedchats;
+
+                    if(selectedchats.current._id !== chatId){
+                        newCount = count
+                        console.log('####### SELECTED DIFFERENT CHAT',chatId,newCount);
+                    }else{
+                        newCount = 0;
+                        console.log('####### SELECTED SAME CHAT',chatId,newCount);
+                    }
                 }
 
                 setchats((prevState) => 
                     prevState.map((item) => {
-                      if (item._id == chatId) {
+                      if (item._id == chatId){
+                        console.log(item._id);
+                        console.log(chatId);
                         return {
                           ...item,
                           unreadCount: newCount,

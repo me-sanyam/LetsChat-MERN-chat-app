@@ -3,6 +3,8 @@ const MESSAGE = require('./models/messagemodel');
 module.exports = function(socket){
 
     socket.on('user-message', async({message,chatId}) => {
+        console.log('#################### user-message ###################');
+        console.log(chatId);
         try{
             const messages = await MESSAGE.find({
                 chat : chatId,
@@ -18,6 +20,8 @@ module.exports = function(socket){
     })
 
     socket.on('read-message', async({chatId,userId}) => {
+        console.log('#################### read-message ###################');
+        console.log(chatId);
         try{
             const messages = await MESSAGE.find({chat : chatId, sender: {$ne: userId}});            
             if(messages.length){
@@ -39,9 +43,9 @@ module.exports = function(socket){
         }
     })
 
-    socket.on('send-socket-update-chat',({chatId,userId}) => {
+    // socket.on('send-socket-update-chat',({chatId,userId}) => {
 
-        console.log('##### send-socket-update-chat',{chatId,userId});
-        // socket.emit(`update-chat-count`,{chatId: chatId, count: 0});
-    })
+    //     console.log('##### send-socket-update-chat',{chatId,userId});
+    //     // socket.emit(`update-chat-count`,{chatId: chatId, count: 0});
+    // })
 }

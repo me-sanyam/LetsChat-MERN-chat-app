@@ -17,15 +17,17 @@ export default function ChatBox({socket}) {
     const [content, setcontent] = useState('');
     const [AllMessages, setAllMessages] = useState([]);
 
-    const selectedChatsRef = useRef(null);
+    const selectedChatsRef = useRef([]);
 
 
     useEffect(() => {
         if(socket && selectedchats && user){
             selectedChatsRef.current = selectedchats;
             socket.on(`get-message`, ({chatId,message}) => {
+                console.log('######## get-message chatId',chatId);
                 if(chatId == selectedChatsRef.current._id){
                     const readBy = message.readBy;
+                    selectedChatsRef.current.unreadCount = selectedChatsRef.current.unreadCount + 1;
                     message.readBy = [...readBy, user.user._id];
                     setAllMessages([...AllMessages, message]);
                 }
@@ -33,9 +35,9 @@ export default function ChatBox({socket}) {
             })
 
             if(
-                selectedchats.latestmessage && 
-                selectedchats.latestmessage.sender._id !== user.user._id &&
-                selectedchats.unreadCount > 0
+                selectedChatsRef.current.latestmessage && 
+                selectedChatsRef.current.latestmessage.sender._id !== user.user._id &&
+                selectedChatsRef.current.unreadCount > 0
             ){
                 socket.emit('read-message',{chatId: selectedChatsRef.current._id, userId: user.user._id});
                 return;
