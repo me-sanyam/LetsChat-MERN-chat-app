@@ -27,7 +27,7 @@ export default function MyChats({socket}) {
                 }else if(selectedchats){
                     selectedChatsRef.current = selectedchats;
 
-                    if(selectedchats.current._id !== chatId){
+                    if(selectedChatsRef.current._id !== chatId){
                         newCount = count
                         console.log('####### SELECTED DIFFERENT CHAT',chatId,newCount);
                     }else{
