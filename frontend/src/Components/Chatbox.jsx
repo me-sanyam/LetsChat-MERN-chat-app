@@ -17,12 +17,14 @@ export default function ChatBox({socket}) {
     const [content, setcontent] = useState('');
     const [AllMessages, setAllMessages] = useState([]);
 
-    const selectedChatsRef = useRef([]);
+    const selectedChatsRef = useRef(null);
 
 
     useEffect(() => {
         if(socket && selectedchats && user){
             selectedChatsRef.current = selectedchats;
+            
+            console.log({selectedchats});
             socket.on(`get-message`, ({chatId,message}) => {
                 console.log('######## get-message chatId',chatId);
                 if(chatId == selectedChatsRef.current._id){
@@ -34,6 +36,14 @@ export default function ChatBox({socket}) {
                 return;
             })
 
+        }
+    },[user,AllMessages,selectedchats])
+ 
+
+    useEffect(() => {
+        if(selectedchats){
+            selectedChatsRef.current = selectedchats;
+
             if(
                 selectedChatsRef.current.latestmessage && 
                 selectedChatsRef.current.latestmessage.sender._id !== user.user._id &&
@@ -43,8 +53,8 @@ export default function ChatBox({socket}) {
                 return;
             }
         }
-    },[user,AllMessages,selectedchats])
- 
+    },[selectedchats])
+
     const handleUserSearch = async (e) => {
         e.preventDefault();
         try {
@@ -127,7 +137,7 @@ export default function ChatBox({socket}) {
             toast.error('Enter a valid Group Name')
             return
         }
-        if (selectedchats.groupAdmin._id !== user.user._id) {
+        if (selectedchats && selectedchats.groupAdmin._id !== user.user._id) {
             toast.error('Only Admin can Update Group Chat.')
             return
         }
@@ -343,7 +353,7 @@ export default function ChatBox({socket}) {
                                                 onClick={() => HandleExit(user.user._id)}
                                             >Exit</button>
                                         }
-                                        {selectedchats.groupAdmin._id == user.user._id &&
+                                        {selectedchats && selectedchats.groupAdmin._id == user.user._id &&
                                             <button
                                                 className="btn btn-success"
                                                 onClick={handleNameChange}
@@ -431,17 +441,17 @@ export default function ChatBox({socket}) {
                             </Scrollable>
                         </div>
 
-                        <form class="d-flex FormBox py-2" onSubmit={HandleSendMessage}>
+                        <form className="d-flex FormBox py-2" onSubmit={HandleSendMessage}>
                             <input
                                 type="text"
-                                class="form-control me-2"
+                                className="form-control me-2"
                                 id="MessageInput"
                                 placeholder="Send Message"
                                 value={content}
                                 required
                                 onChange={(e) => setcontent(e.target.value)}
                             />
-                            <button type="submit" class="btn d-inline-flex StyledButton">
+                            <button type="submit" className="btn d-inline-flex StyledButton">
                                 <BsFillSendFill size={22} color="white" />
                             </button>
                         </form>

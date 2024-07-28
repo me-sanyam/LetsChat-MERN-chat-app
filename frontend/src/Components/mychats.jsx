@@ -301,7 +301,7 @@ export default function MyChats({socket}) {
                                                 <>
                                                     {chat.latestmessage.sender._id !== user.user._id && (chat.unreadCount > 0) ?
                                                         <div
-                                                            class="position-absolute bg-dark rounded-circle d-flex justify-content-center align-items-center"
+                                                            className="position-absolute bg-dark rounded-circle d-flex justify-content-center align-items-center"
                                                             style={{color: '#fff', right:"10px", width:"30px", height:"30px", padding: "12px", fontSize: '14px'}}
                                                         >
                                                             {chat.unreadCount}
