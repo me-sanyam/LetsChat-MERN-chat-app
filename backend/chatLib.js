@@ -38,6 +38,7 @@ module.exports = function(socket){
                 });
             }
             socket.broadcast.emit(`update-chat-count`,{chatId: chatId, count: 0});
+            socket.emit(`update-chat-count`,{chatId: chatId, count: 0});
         }catch(e){
             console.log('--> Error',e);
         }
