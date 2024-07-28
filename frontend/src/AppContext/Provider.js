@@ -17,7 +17,7 @@ export default function ContextProvider({ children }) {
             navigate("/");
         }
 
-    }, [navigate]);
+    }, [navigate,selectedchats]);
 
     return (
         <Appcontext.Provider
