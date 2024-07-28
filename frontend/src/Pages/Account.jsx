@@ -8,7 +8,7 @@ import axios from 'axios'
 export default function RegisterUser() {
     const navigate = useNavigate();
     const [name, setname] = useState('')
-    const [email, setemail] = useState('')
+    let [email, setemail] = useState('')
     const [password, setpassword] = useState('')
     const [show, setshow] = useState(true)
     const [avatar, setavatar] = useState('')
@@ -38,6 +38,7 @@ export default function RegisterUser() {
                     "Content-Type": "application/json"
                 }
             }
+            email = email.toLowerCase();
             const { data } = await axios.post('http://localhost:5000/api/login', { email, password }, config);
             toast.info('User Login successfull.');
             navigate('/Lets-Chat');
@@ -56,6 +57,7 @@ export default function RegisterUser() {
                     "Content-Type": "application/json"
                 }
             }
+            email = email.toLowerCase();
             const { data } = await axios.post('http://localhost:5000/api/signup', { name, email, password, avatar }, config);
             toast.info('User signup successfull.');
             navigate('/Lets-Chat');

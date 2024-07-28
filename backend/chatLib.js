@@ -42,10 +42,4 @@ module.exports = function(socket){
             console.log('--> Error',e);
         }
     })
-
-    // socket.on('send-socket-update-chat',({chatId,userId}) => {
-
-    //     console.log('##### send-socket-update-chat',{chatId,userId});
-    //     // socket.emit(`update-chat-count`,{chatId: chatId, count: 0});
-    // })
 }
